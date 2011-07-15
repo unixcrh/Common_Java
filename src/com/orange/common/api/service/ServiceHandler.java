@@ -1,4 +1,4 @@
-package com.orange.place.api.service;
+package com.orange.common.api.service;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -12,32 +12,35 @@ import me.prettyprint.hector.api.exceptions.HectorException;
 
 import com.orange.common.cassandra.CassandraClient;
 import com.orange.common.mongodb.MongoDBClient;
-import com.orange.place.api.PlaceAPIServer;
-import com.orange.place.constant.DBConstants;
-import com.orange.place.constant.ErrorCode;
-import com.orange.place.constant.ServiceConstant;
 
 public class ServiceHandler {
-
-	public static final CassandraClient cassandraClient = new CassandraClient(
-			DBConstants.SERVER, DBConstants.CLUSTERNAME, DBConstants.KEYSPACE);
 	
-	public static final MongoDBClient mongoClient = new MongoDBClient("localhost", "testdb", "", "");
-
-	private static final Logger log = Logger.getLogger(PlaceAPIServer.class
+	private static final Logger log = Logger.getLogger(ServiceHandler.class
 			.getName());
 
-	public static ServiceHandler getServiceHandler() {
+	CassandraClient cassandraClient = null;	
+	MongoDBClient mongoClient = null;
+
+	
+	public static ServiceHandler getServiceHandler(CassandraClient cassandraClient) {
 		ServiceHandler handler = new ServiceHandler();
+		handler.cassandraClient = cassandraClient;
 		return handler;
 	}
 
+	public static ServiceHandler getServiceHandler(MongoDBClient mongoClient) {
+		ServiceHandler handler = new ServiceHandler();
+		handler.mongoClient = mongoClient;
+		return handler;
+	}
+
+	
 	public void handlRequest(HttpServletRequest request,
 			HttpServletResponse response) {
 
 		printRequest(request);
 
-		String method = request.getParameter(ServiceConstant.METHOD);
+		String method = request.getParameter(CommonParameter.METHOD);
 		CommonService obj = null;
 		
 		try {
@@ -58,7 +61,7 @@ public class ServiceHandler {
 
 			if (obj == null) {
 				sendResponseByErrorCode(response,
-						ErrorCode.ERROR_PARA_METHOD_NOT_FOUND);
+						CommonErrorCode.ERROR_PARA_METHOD_NOT_FOUND);
 				return;
 			}
 
@@ -68,7 +71,7 @@ public class ServiceHandler {
 			
 			if (!obj.validateSecurity(request)) {
 				sendResponseByErrorCode(response,
-						ErrorCode.ERROR_INVALID_SECURITY);
+						CommonErrorCode.ERROR_INVALID_SECURITY);
 				return;
 			}
 
@@ -84,15 +87,15 @@ public class ServiceHandler {
 			// handle request
 			obj.handleData();
 		} catch (HectorException e) {
-			obj.resultCode = ErrorCode.ERROR_CASSANDRA;
+			obj.resultCode = CommonErrorCode.ERROR_CASSANDRA;
 			log.severe("catch DB exception=" + e.toString());
 			e.printStackTrace();
 		} catch (JSONException e) {
-			obj.resultCode = ErrorCode.ERROR_JSON;
+			obj.resultCode = CommonErrorCode.ERROR_JSON;
 			log.severe("catch JSON exception=" + e.toString());
 			e.printStackTrace();
 		} catch (Exception e) {
-			obj.resultCode = ErrorCode.ERROR_SYSTEM;
+			obj.resultCode = CommonErrorCode.ERROR_SYSTEM;
 			log.severe("catch general exception=" + e.toString());
 			e.printStackTrace();
 		} finally {
@@ -125,7 +128,7 @@ public class ServiceHandler {
 	}
 
 	void sendResponseByErrorCode(HttpServletResponse response, int errorCode) {
-		String resultString = ErrorCode.getJSONByErrorCode(errorCode);
+		String resultString = CommonErrorCode.getJSONByErrorCode(errorCode);
 		sendResponse(response, resultString);
 	}
 }

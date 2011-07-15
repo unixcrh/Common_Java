@@ -11,10 +11,7 @@ import me.prettyprint.cassandra.service.CassandraHostConfigurator;
 import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.beans.ColumnSlice;
-import me.prettyprint.hector.api.beans.CounterRows;
-import me.prettyprint.hector.api.beans.CounterSlice;
 import me.prettyprint.hector.api.beans.HColumn;
-import me.prettyprint.hector.api.beans.HCounterColumn;
 import me.prettyprint.hector.api.beans.OrderedRows;
 import me.prettyprint.hector.api.beans.Row;
 import me.prettyprint.hector.api.beans.Rows;
@@ -22,15 +19,10 @@ import me.prettyprint.hector.api.factory.HFactory;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
 import me.prettyprint.hector.api.query.CountQuery;
-import me.prettyprint.hector.api.query.CounterQuery;
-import me.prettyprint.hector.api.query.MultigetSliceCounterQuery;
 import me.prettyprint.hector.api.query.MultigetSliceQuery;
 import me.prettyprint.hector.api.query.QueryResult;
 import me.prettyprint.hector.api.query.RangeSlicesQuery;
-import me.prettyprint.hector.api.query.SliceCounterQuery;
 import me.prettyprint.hector.api.query.SliceQuery;
-
-import com.orange.place.manager.CommonManager;
 
 public class CassandraClient {
 	Cluster cluster;
@@ -39,6 +31,7 @@ public class CassandraClient {
 	final static StringSerializer ss = StringSerializer.get();
 	final static LongSerializer ls = LongSerializer.get();
 	final static UUIDSerializer us = UUIDSerializer.get();
+	final static int UNLIMITED_COUNT = 99999;
 
 	final static int MAX_COUNT_FOR_MULTI_ROW = 50;
 
@@ -312,7 +305,7 @@ public class CassandraClient {
 			String key) {
 		List<HColumn<String, String>> list = getColumnKeyByStringRange(
 				columnFamilyName, key, null, null,
-				CommonManager.UNLIMITED_COUNT);
+				UNLIMITED_COUNT);
 		return list;
 	}
 
@@ -391,7 +384,7 @@ public class CassandraClient {
 				ss);
 		cq.setColumnFamily(columnFamilyName);
 		cq.setKey(key);
-		cq.setRange(null, null, CommonManager.UNLIMITED_COUNT);
+		cq.setRange(null, null, UNLIMITED_COUNT);
 		QueryResult<Integer> r = cq.execute();
 		return r.get().intValue();
 	}

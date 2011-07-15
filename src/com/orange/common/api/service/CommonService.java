@@ -1,4 +1,5 @@
-package com.orange.place.api.service;
+package com.orange.common.api.service;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,14 +12,12 @@ import net.sf.json.JSONObject;
 import com.orange.common.cassandra.CassandraClient;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.common.utils.StringUtil;
-import com.orange.place.api.PlaceAPIServer;
-import com.orange.place.constant.ErrorCode;
-import com.orange.place.constant.ServiceConstant;
 
 public abstract class CommonService {
 	// response data
-	int resultCode = ErrorCode.ERROR_SUCCESS;
+	int resultCode = 0;
 	Object resultData = null;
+	
 	CassandraClient cassandraClient = null;
 	MongoDBClient mongoClient = null;
 	HttpServletRequest request = null;
@@ -47,58 +46,6 @@ public abstract class CommonService {
 		if (methodMap != null)
 			return;
 		methodMap = new HashMap<String, Class>();
-		methodMap.put(ServiceConstant.METHOD_REGISTRATION,
-				RegisterUserService.class);
-		methodMap.put(ServiceConstant.METHOD_CREATEPLACE,
-				CreatePlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_CREATEPOST,
-				CreatePostService.class);
-		methodMap.put(ServiceConstant.METHOD_GETPLACEPOST,
-				GetPlacePostService.class);
-		methodMap.put(ServiceConstant.METHOD_GETNEARBYPLACE,
-				GetNearbyPlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_USERFOLLOWPLACE,
-				UserFollowPlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_GETUSERFOLLOWPOSTS,
-				GetUserTimelineService.class);
-		methodMap.put(ServiceConstant.METHOD_GETNEARBYPOSTS,
-				GetNearbyPostService.class);
-		methodMap.put(ServiceConstant.METHOD_USERUNFOLLOWPLACE,
-				UserUnFollowPlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_GETUSERFOLLOWPLACE,
-				GetUserFollowPlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_DEVICELOGIN,
-				DeviceLoginService.class);
-		methodMap.put(ServiceConstant.METHOD_GETPOSTRELATEDPOST,
-				GetPostRelatedPostService.class);
-		methodMap.put(ServiceConstant.METHOD_BINDUSER, BindUserService.class);
-		methodMap.put(ServiceConstant.METHOD_GETMYPOSTS,
-				GetUserPostService.class);
-		methodMap.put(ServiceConstant.METHOD_SENDMESSAGE,
-				SendMessageService.class);
-		methodMap.put(ServiceConstant.METHOD_GETMYMESSAGE,
-				GetMyMessageService.class);
-		methodMap.put(ServiceConstant.METHOD_DELETEMESSAGE,
-				DeleteMeMessageService.class);
-		methodMap.put(ServiceConstant.METHOD_GETMEPOST, GetMePostService.class);
-		methodMap.put(ServiceConstant.METHOD_UPDATEUSER,
-				UpdateUserService.class);
-		methodMap.put(ServiceConstant.METHOD_UPDATEPLACE,
-				UpdatePlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_GETAPPS, GetRecommendAppService.class);
-		methodMap.put(ServiceConstant.METHOD_GETAPPUPDATE, GetAppUpdateService.class);
-		methodMap.put(ServiceConstant.METHOD_GETPLACE, GetPlaceService.class);
-		methodMap.put(ServiceConstant.METHOD_GETPUBLICTIMELINE,
-				GetPublicTimeline.class);
-		methodMap.put(ServiceConstant.METHOD_ACTIONONPOST,
-				ActionOnPostService.class);
-
-		// group buy methods
-		methodMap.put(ServiceConstant.METHOD_REGISTERDEVICE,
-				RegisterDeviceService.class);
-		methodMap.put(ServiceConstant.METHOD_GROUPBUY_DEVICELOGIN,
-				GroupBuyDeviceLoginService.class);
-
 	}
 
 	public CassandraClient getCassandraClient() {
@@ -109,7 +56,7 @@ public abstract class CommonService {
 		this.cassandraClient = cassandraClient;
 	}
 
-	public static final Logger log = Logger.getLogger(PlaceAPIServer.class
+	public static final Logger log = Logger.getLogger(CommonService.class
 			.getName());
 
 	@SuppressWarnings("unchecked")
@@ -147,9 +94,9 @@ public abstract class CommonService {
 	public String getResponseString() {
 		JSONObject resultObject = new JSONObject();
 		if (resultData != null) {
-			resultObject.put(ServiceConstant.RET_DATA, resultData);
+			resultObject.put(CommonParameter.RET_DATA, resultData);
 		}
-		resultObject.put(ServiceConstant.RET_CODE, resultCode);
+		resultObject.put(CommonParameter.RET_CODE, resultCode);
 
 		String retString = resultObject.toString();
 		return retString;
@@ -176,19 +123,19 @@ public abstract class CommonService {
 			return true;
 		}
 
-		String timeStamp = request.getParameter(ServiceConstant.PARA_TIMESTAMP);
-		String mac = request.getParameter(ServiceConstant.PARA_MAC);
+		String timeStamp = request.getParameter(CommonParameter.PARA_TIMESTAMP);
+		String mac = request.getParameter(CommonParameter.PARA_MAC);
 
 		// if (!check(userId, ErrorCode.ERROR_PARAMETER_USERID_EMPTY,
 		// ErrorCode.ERROR_PARAMETER_USERID_NULL))
 		// return false;
 
-		if (!check(timeStamp, ErrorCode.ERROR_PARAMETER_TIMESTAMP_EMPTY,
-				ErrorCode.ERROR_PARAMETER_TIMESTAMP_NULL))
+		if (!check(timeStamp, CommonErrorCode.ERROR_PARAMETER_TIMESTAMP_EMPTY,
+				CommonErrorCode.ERROR_PARAMETER_TIMESTAMP_NULL))
 			return false;
 
-		if (!check(mac, ErrorCode.ERROR_PARAMETER_MAC_EMPTY,
-				ErrorCode.ERROR_PARAMETER_MAC_NULL))
+		if (!check(mac, CommonErrorCode.ERROR_PARAMETER_MAC_EMPTY,
+				CommonErrorCode.ERROR_PARAMETER_MAC_NULL))
 			return false;
 
 		String input = timeStamp + SHARE_KEY;
@@ -209,5 +156,4 @@ public abstract class CommonService {
 			return false;
 		}
 	}
-
 }

@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 import com.orange.common.utils.DateUtil;
-import com.orange.place.constant.ServiceConstant;
 
 public class SNSRequestManager {
 
@@ -23,7 +22,7 @@ public class SNSRequestManager {
 	private String SinaWeiboConsumerKey = null;
 	private String SinaWeiboConsumerSecret = null;
 	private List<Thread> threadList = new ArrayList<Thread>();
-	private static String logFile = ServiceConstant.SNS_LOG_FILE;
+	private static String ERROR_LOG_FILE = "sns_sync_error.log";
 	private int threadCount = 1;
 
 	public static final long INTERVAL = 1000;
@@ -116,7 +115,7 @@ public class SNSRequestManager {
 	public static void logToFile(String info) {
 		try {
 			log.info(info);
-			FileWriter fileWriter = new FileWriter(logFile, true);
+			FileWriter fileWriter = new FileWriter(ERROR_LOG_FILE, true);
 			fileWriter.write(info + "\r\n");
 			fileWriter.flush();
 			fileWriter.close();
@@ -124,7 +123,7 @@ public class SNSRequestManager {
 			// TODO Auto-generated catch block
 			log
 					.info("<SNSRequestManager.logToFile>: fail to log to file. file="
-							+ logFile);
+							+ ERROR_LOG_FILE);
 			e.printStackTrace();
 		}
 	}
