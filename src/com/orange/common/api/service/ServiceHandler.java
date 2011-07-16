@@ -20,17 +20,20 @@ public class ServiceHandler {
 
 	CassandraClient cassandraClient = null;	
 	MongoDBClient mongoClient = null;
+	CommonServiceFactory serviceFactory = null;
 
 	
-	public static ServiceHandler getServiceHandler(CassandraClient cassandraClient) {
+	public static ServiceHandler getServiceHandler(CassandraClient cassandraClient, CommonServiceFactory serviceFactory) {
 		ServiceHandler handler = new ServiceHandler();
 		handler.cassandraClient = cassandraClient;
+		handler.serviceFactory = serviceFactory;
 		return handler;
 	}
 
-	public static ServiceHandler getServiceHandler(MongoDBClient mongoClient) {
+	public static ServiceHandler getServiceHandler(MongoDBClient mongoClient, CommonServiceFactory serviceFactory) {
 		ServiceHandler handler = new ServiceHandler();
 		handler.mongoClient = mongoClient;
+		handler.serviceFactory = serviceFactory;
 		return handler;
 	}
 
@@ -42,20 +45,7 @@ public class ServiceHandler {
 
 		String method = request.getParameter(CommonParameter.METHOD);
 		CommonService obj = null;
-		
-		try {
-			obj = CommonService.createServiceObjectByMethod(method);
-		} catch (InstantiationException e1) {
-			log
-					.severe("<handlRequest> but exception while create service object for method("
-							+ method + "), exception=" + e1.toString());
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			log
-					.severe("<handlRequest> but exception while create service object for method("
-							+ method + "), exception=" + e1.toString());
-			e1.printStackTrace();
-		}
+		obj = serviceFactory.createServiceObjectByMethod(method);
 
 		try {
 
