@@ -5,8 +5,10 @@ import java.net.UnknownHostException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+import com.mongodb.WriteResult;
 
 public class MongoDBClient {
 	
@@ -52,6 +54,33 @@ public class MongoDBClient {
 		
 		collection.insert(docObject);		
 		return true;
+	}
+
+	public DBObject findAndModify(String tableName, String fieldName,
+			int findValue, int modifyValue) {
+		
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, findValue);
+		
+		DBObject update = new BasicDBObject();
+		DBObject updateValue = new BasicDBObject();
+		updateValue.put(fieldName, modifyValue);
+		update.put("$set", updateValue);
+		
+		return collection.findAndModify(query, null, null, false, update, true, false);
+	}
+
+	public void save(String tableName, DBObject docObject) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return;
+		
+		collection.save(docObject);
+		return;
 	}
 
 
