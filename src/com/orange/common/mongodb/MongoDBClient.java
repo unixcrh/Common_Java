@@ -2,6 +2,7 @@ package com.orange.common.mongodb;
 
 import java.net.UnknownHostException;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
@@ -42,6 +43,15 @@ public class MongoDBClient {
 		this.db = mongo.getDB(dbName);
 		boolean auth = db.authenticate(userName, password.toCharArray());
 		return;
+	}
+
+	public boolean insert(String tableName, BasicDBObject docObject) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return false;
+		
+		collection.insert(docObject);		
+		return true;
 	}
 
 

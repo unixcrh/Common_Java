@@ -15,11 +15,12 @@ import com.orange.common.utils.StringUtil;
 
 public abstract class CommonService {
 	// response data
-	int resultCode = 0;
-	Object resultData = null;
+	protected int resultCode = 0;
+	protected Object resultData = null;
 	
-	CassandraClient cassandraClient = null;
-	MongoDBClient mongoClient = null;
+	protected CassandraClient cassandraClient = null;
+	protected MongoDBClient mongoClient = null;
+	
 	HttpServletRequest request = null;
 
 	public MongoDBClient getMongoClient() {
@@ -39,14 +40,8 @@ public abstract class CommonService {
 	}
 
 	@SuppressWarnings("unchecked")
-	static private Map<String, Class> methodMap = null;
-
-	@SuppressWarnings("unchecked")
-	static private void initMethodMap() {
-		if (methodMap != null)
-			return;
-		methodMap = new HashMap<String, Class>();
-	}
+	protected
+	static Map<String, Class> methodMap = new HashMap<String, Class>();
 
 	public CassandraClient getCassandraClient() {
 		return cassandraClient;
@@ -55,34 +50,22 @@ public abstract class CommonService {
 	public void setCassandraClient(CassandraClient cassandraClient) {
 		this.cassandraClient = cassandraClient;
 	}
-
+	
 	public static final Logger log = Logger.getLogger(CommonService.class
 			.getName());
 
-	@SuppressWarnings("unchecked")
+	
 	public static CommonService createServiceObjectByMethod(String method)
 			throws InstantiationException, IllegalAccessException {
-		initMethodMap();
-		Class classObj = methodMap.get(method);
-		if (classObj == null) {
-			log.warning("Cannot find service object for METHOD = " + method);
-			return null;
-		}
-
-		CommonService obj = (CommonService) classObj.newInstance();
-		if (obj == null) {
-			log
-					.warning("Cannot create service object by given class for method = "
-							+ method);
-		}
-		return obj;
+		return null;
 	}
 
 	// save data from request to object fields
 	public abstract boolean setDataFromRequest(HttpServletRequest request);
 
-	// print object fields (for request data)
-	public abstract void printData();
+	public void printData(){
+		log.info(toString());
+	}
 
 	// return false if this method doesn't need security check
 	public abstract boolean needSecurityCheck();
