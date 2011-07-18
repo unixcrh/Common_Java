@@ -1,6 +1,7 @@
 package com.orange.common.mongodb;
 
 import java.net.UnknownHostException;
+import java.util.Map;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -81,6 +82,32 @@ public class MongoDBClient {
 		
 		collection.save(docObject);
 		return;
+	}
+
+	public DBObject findOne(String tableName, String fieldName, String fieldValue) {
+		if (fieldValue == null)
+			return null;
+		
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, fieldValue);
+		return collection.findOne(query);		
+	}
+
+	public Object findOne(String tableName, Map<String, String> fieldValues) {
+		if (fieldValues == null)
+			return null;
+		
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		
+		DBObject query = new BasicDBObject();
+		query.putAll(fieldValues);
+		return collection.findOne(query);		
 	}
 
 
