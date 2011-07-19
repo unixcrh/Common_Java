@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -48,6 +49,17 @@ public class StringUtil {
 		Integer time = Integer.parseInt(str);		
 		return new Date(time.longValue()*1000);
 	}
+	// 2011-07-19T00:00:00+08:00
+	public static Date dateFromString(String str){
+		
+		int year   = intFromString(str.substring(0, 4));
+		int month  = intFromString(str.substring(5, 7));
+		int day	   = intFromString(str.substring(8, 10));
+		int hour   = intFromString(str.substring(11, 13));
+		int minute = intFromString(str.substring(14, 16));
+		int second = intFromString(str.substring(17, 19));
+		return new Date(year, month, day, hour, minute, second);
+	}
 	
 	public static int intFromString(String str){
 		if (str == null || str.length() == 0)
@@ -59,7 +71,12 @@ public class StringUtil {
 
 	public static double doubleFromString(String str){
 		if (str == null || str.length() == 0)
-			return 0.0;
+			return -1;
+		
+		str = str.replaceAll("\\-", "");
+		if (str.length() == 0){
+			return -1;
+		}
 		
 		Double i = Double.parseDouble(str);
 		return i.doubleValue();
