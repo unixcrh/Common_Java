@@ -4,7 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 import org.apache.commons.codec.binary.Base64;
@@ -80,5 +82,20 @@ public class StringUtil {
 		
 		Double i = Double.parseDouble(str);
 		return i.doubleValue();
+	}
+
+	public static List<String> stringToList(String strings) {
+		if (strings == null)
+			return null;
+		
+		String[] list = strings.split(",");
+		if (list == null || list.length == 0)
+			return null;
+		
+		List<String> stringList = new ArrayList<String>();
+		for (int i=0; i<list.length; i++)
+			stringList.add(list[i]);
+
+		return stringList;
 	}
 }
