@@ -4,8 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.zip.DataFormatException;
+
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -51,14 +53,17 @@ public class StringUtil {
 	}
 	// 2011-07-19T00:00:00+08:00
 	public static Date dateFromString(String str){
+		try {
+			SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'+08:00'");
+			Date date = myFormatter.parse(str);
+			return date;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		
-		int year   = intFromString(str.substring(0, 4));
-		int month  = intFromString(str.substring(5, 7));
-		int day	   = intFromString(str.substring(8, 10));
-		int hour   = intFromString(str.substring(11, 13));
-		int minute = intFromString(str.substring(14, 16));
-		int second = intFromString(str.substring(17, 19));
-		return new Date(year, month, day, hour, minute, second);
+		
 	}
 	
 	public static int intFromString(String str){
