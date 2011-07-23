@@ -3,6 +3,8 @@ package com.orange.common.mongodb;
 import java.net.UnknownHostException;
 import java.util.Map;
 
+import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -52,7 +54,6 @@ public class MongoDBClient {
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
 			return false;
-		
 		collection.insert(docObject);		
 		return true;
 	}
@@ -75,6 +76,26 @@ public class MongoDBClient {
 		return collection.findAndModify(query, null, null, false, update, true, false);
 	}
 
+	public DBObject findAndModify(String tableName, Map<String, Object> equalCondition, Map<String, Object>updateMap) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		//query.put(fieldName, findValue);
+		query.putAll(equalCondition);
+		
+		DBObject update = new BasicDBObject();
+		DBObject updateValue = new BasicDBObject();
+		//updateValue.put(fieldName, modifyValue);
+		updateValue.putAll(updateMap);
+		update.put("$set", updateValue);
+		//collection.findan
+		System.out.println("query = " + query.toString());
+		System.out.println("update = " + updateValue.toString());
+		return collection.findAndModify(query, update);
+	}
+	
 	public void save(String tableName, DBObject docObject) {
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
@@ -109,8 +130,5 @@ public class MongoDBClient {
 		query.putAll(fieldValues);
 		return collection.findOne(query);		
 	}
-
-
-	
 		
 }
