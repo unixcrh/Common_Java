@@ -50,7 +50,7 @@ public class MongoDBClient {
 		return;
 	}
 
-	public boolean insert(String tableName, BasicDBObject docObject) {
+	public boolean insert(String tableName, DBObject docObject) {
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
 			return false;
@@ -118,7 +118,7 @@ public class MongoDBClient {
 		return collection.findOne(query);		
 	}
 
-	public Object findOne(String tableName, Map<String, String> fieldValues) {
+	public DBObject findOne(String tableName, Map<String, String> fieldValues) {
 		if (fieldValues == null)
 			return null;
 		

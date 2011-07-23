@@ -4,7 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.DataFormatException;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -48,6 +55,20 @@ public class StringUtil {
 		Integer time = Integer.parseInt(str);		
 		return new Date(time.longValue()*1000);
 	}
+	// 2011-07-19T00:00:00+08:00
+	public static Date dateFromString(String str){
+		try {
+			SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'+08:00'");
+			Date date = myFormatter.parse(str);
+			return date;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
 	
 	public static int intFromString(String str){
 		if (str == null || str.length() == 0)
@@ -59,9 +80,29 @@ public class StringUtil {
 
 	public static double doubleFromString(String str){
 		if (str == null || str.length() == 0)
-			return 0.0;
+			return -1;
+		
+		str = str.replaceAll("\\-", "");
+		if (str.length() == 0){
+			return -1;
+		}
 		
 		Double i = Double.parseDouble(str);
 		return i.doubleValue();
+	}
+
+	public static List<String> stringToList(String strings) {
+		if (strings == null)
+			return null;
+		
+		String[] list = strings.split(",");
+		if (list == null || list.length == 0)
+			return null;
+		
+		List<String> stringList = new ArrayList<String>();
+		for (int i=0; i<list.length; i++)
+			stringList.add(list[i]);
+
+		return stringList;
 	}
 }
