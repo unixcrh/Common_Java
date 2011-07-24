@@ -202,16 +202,39 @@ public class MongoDBClient {
 	}
 
 	public DBCursor findByFieldInValues(String tableName, String fieldName,
-			List<Object> orList, int offset, int count) {
+			List<Object> valueList, int offset, int count) {
 
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
 			return null;
 		DBObject in = new BasicDBObject();
-		in.put("$in", orList);
+		in.put("$in", valueList);
 		DBObject query = new BasicDBObject();
 		query.put(fieldName, in);
 		return collection.find(query).skip(offset).limit(count);
+	}
+
+	public DBCursor findByFieldsInValues(String tableName,
+			Map<String, List<Object>> fieldValueMap, int offset, int limit) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null) {
+			return null;
+		}
+		
+		
+		DBObject query = null;
+		if (fieldValueMap != null && fieldValueMap.size() > 0) {
+			query = new BasicDBObject();
+			for(String field : fieldValueMap.keySet()){
+				DBObject in = new BasicDBObject();
+				in.put("$in", fieldValueMap.get(field));
+				query.put(field, in);
+			}
+		}
+		if (query == null ) {
+			return collection.find().skip(offset).limit(limit);
+		}
+		return collection.find(query).skip(offset).limit(limit);
 	}
 
 }
