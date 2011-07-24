@@ -149,28 +149,36 @@ public class MongoDBClient {
 		return collection.findOne(query);
 	}
 
-	public DBCursor findAll(String tableName, String rangeFieldName,
-			String orField, List<String> orList, boolean range, int offset,
+	public static final int SORT_ASCENDING = 1;
+	public static final int SORT_DESCENDING = -1;
+	
+	public DBCursor findByFieldInValues(String tableName,
+			String fieldName, List<String> valueList, String sortFieldName, boolean sortAscending, int offset,
 			int limit) {
+						
 		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
 
 		DBObject orderBy = new BasicDBObject();
-		if (range) {
-			orderBy.put(rangeFieldName, 1);
-		} else {
-			orderBy.put(rangeFieldName, -1);
+		if (sortFieldName != null){
+			if (sortAscending) {
+				orderBy.put(sortFieldName, 1);
+			} else {
+				orderBy.put(sortFieldName, -1);
+			}
 		}
+		
 		DBObject in = new BasicDBObject();
 		DBObject query = new BasicDBObject();
-		if (orField == null || orField.trim().length() < 1 || orList == null
-				|| orList.size() < 1) {
-		} else {
-			in.put("$in", orList);
-			query.put(orField, in);
+		if (fieldName != null && fieldName.trim().length() > 0 && valueList != null && valueList.size() > 0) {
+			in.put("$in", valueList);
+			query.put(fieldName, in);
 		}
 
 		DBCursor result = collection.find(query).sort(orderBy).skip(offset)
 				.limit(limit);
+				
 		return result;
 	}
 
