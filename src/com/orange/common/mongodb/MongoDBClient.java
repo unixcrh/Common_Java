@@ -1,12 +1,14 @@
 package com.orange.common.mongodb;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.management.Query;
 
+import org.apache.cassandra.cli.CliParser.getCondition_return;
 import org.apache.cassandra.cli.CliParser.newColumnFamily_return;
 
 import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
@@ -20,7 +22,10 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
+import org.bson.types.ObjectId;
+
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+import com.sun.jndi.url.dns.dnsURLContext;
 
 public class MongoDBClient {
 
@@ -167,6 +172,41 @@ public class MongoDBClient {
 		DBCursor result = collection.find(query).sort(orderBy).skip(offset)
 				.limit(limit);
 		return result;
+	}
+
+	public DBCursor findNearby(String tableName, String gpsFieldName,
+			double latitude, double longitude, int offset, int count) {
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		List<Double> gpsList = new ArrayList<Double>();
+		gpsList.add(latitude);
+		gpsList.add(longitude);
+
+		DBObject near = new BasicDBObject();
+		near.put("$near", gpsList);
+		DBObject query = new BasicDBObject();
+		query.put(gpsFieldName, near);
+
+		System.out.println(query.toString());
+
+		DBCursor result = collection.find(query).skip(offset).limit(count);
+		return result;
+	}
+
+	public  DBCursor findAll(String tableName, String fieldName,
+			List<Object> orList, int offset, int count) {
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		DBObject in = new BasicDBObject();
+		in.put("$in", orList);
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, in);
+		return collection.find(query).skip(offset).limit(count);
 	}
 
 }
