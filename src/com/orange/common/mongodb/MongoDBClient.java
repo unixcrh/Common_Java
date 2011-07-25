@@ -112,8 +112,6 @@ public class MongoDBClient {
 
 	public DBObject findOne(String tableName, String fieldName,
 			String fieldValue) {
-		if (fieldValue == null)
-			return null;
 
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
@@ -122,6 +120,18 @@ public class MongoDBClient {
 		DBObject query = new BasicDBObject();
 		query.put(fieldName, fieldValue);
 		return collection.findOne(query);
+	}
+	
+	public DBCursor find(String tableName, String fieldName,
+			String fieldValue, int limit) {
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, fieldValue);
+		return collection.find(query).limit(limit);
 	}
 
 	public DBObject findOne(String tableName, Map<String, String> fieldValues) {
