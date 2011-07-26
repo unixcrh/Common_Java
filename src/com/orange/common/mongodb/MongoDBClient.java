@@ -150,6 +150,26 @@ public class MongoDBClient {
 	public static final int SORT_ASCENDING = 1;
 	public static final int SORT_DESCENDING = -1;
 
+	public DBCursor find(String tableName, DBObject query, DBObject orderBy, int offset, int limit){
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		System.out.println("<debug> find "+tableName+", query="+
+				query.toString()+", orderBy="+orderBy.toString()+
+				", limit="+limit+", offset="+offset);
+		
+		DBCursor cursor = null;
+		if (orderBy == null){
+			cursor = collection.find(query).skip(offset).limit(limit);
+		}
+		else{
+			cursor = collection.find(query).sort(orderBy).skip(offset).limit(limit);
+		}
+		
+		return cursor;
+	}
+	
 	public DBCursor findByFieldInValues(String tableName, String fieldName,
 			List<String> valueList, String sortFieldName,
 			boolean sortAscending, int offset, int limit) {
