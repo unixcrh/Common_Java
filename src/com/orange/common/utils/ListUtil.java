@@ -16,4 +16,17 @@ public class ListUtil {
 		
 		return list;
 	}
+
+	public static List<Integer> stringsToIntList(String...strings){
+		if (strings == null)
+			return null;
+		
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i=0; i<strings.length; i++){			
+			list.add(Integer.parseInt(strings[i]));
+		}
+		
+		return list;
+	}
+
 }
