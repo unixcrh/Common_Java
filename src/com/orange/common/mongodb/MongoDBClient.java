@@ -155,9 +155,9 @@ public class MongoDBClient {
 		if (collection == null)
 			return null;
 
-		System.out.println("<debug> find "+tableName+", query="+
-				query.toString()+", orderBy="+orderBy.toString()+
-				", limit="+limit+", offset="+offset);
+//		System.out.println("<debug> find "+tableName+", query="+
+//				query.toString()+", orderBy="+orderBy.toString()+
+//				", limit="+limit+", offset="+offset);
 		
 		DBCursor cursor = null;
 		if (orderBy == null){
