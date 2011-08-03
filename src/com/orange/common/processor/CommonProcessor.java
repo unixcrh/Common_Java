@@ -10,7 +10,7 @@ import com.orange.common.mongodb.MongoDBClient;
 public abstract class CommonProcessor implements Runnable {
 	
 	public static final Logger log = Logger.getLogger(CommonProcessor.class.getName());		
-	protected BlockingQueue<BasicProcessorRequest> queue = new LinkedBlockingQueue<BasicProcessorRequest>();		
+	public static final BlockingQueue<BasicProcessorRequest> queue = new LinkedBlockingQueue<BasicProcessorRequest>();		
 	
 	@Override
 	public void run() {
