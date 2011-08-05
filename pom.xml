@@ -40,24 +40,16 @@
 				</excludes>
 			</testResource>
 		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
+		
 	</build>
+	
 	<!-- Shared version number properties -->
 	<properties>
 		<org.springframework.version>3.0.5.RELEASE
 		</org.springframework.version>
 		<org.apache.mahout.version>0.4</org.apache.mahout.version>
 		<jettyVersion>7.3.0.v20110203</jettyVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>				
 	</properties>
 	<dependencies>
 
