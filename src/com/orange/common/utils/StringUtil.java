@@ -105,4 +105,14 @@ public class StringUtil {
 
 		return stringList;
 	}
+
+	public static boolean booleanFromString(String isPostString) {
+		if (isPostString == null)
+			return false;
+		
+		if (isPostString.equalsIgnoreCase("no"))
+			return false;
+		else
+			return true;
+	}
 }

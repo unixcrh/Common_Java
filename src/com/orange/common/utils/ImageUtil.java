@@ -81,14 +81,13 @@ public class ImageUtil {
 
 			BufferedImage tag = new BufferedImage(width, height,
 					BufferedImage.TYPE_INT_RGB);
-			tag.getGraphics().drawImage(src, 0, 0, width, height, null); // 绘制缩小后的图
+			tag.getGraphics().drawImage(src, 0, 0, width, height, null); 
 			outFile = new File(outImageName);
 			FileOutputStream newimage = new FileOutputStream(outFile);
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(newimage);
-			encoder.encode(tag); // 近JPEG编码
+			encoder.encode(tag); 
 			newimage.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return outFile;

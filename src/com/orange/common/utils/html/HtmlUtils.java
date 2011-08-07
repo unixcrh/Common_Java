@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 public class HtmlUtils {
 	
-	// 根据网页的HTML内容提取网页的Encoding
 	  public static String getEncoding(String html)
 	  {
 		  
