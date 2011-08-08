@@ -55,6 +55,7 @@ public class StringUtil {
 		Integer time = Integer.parseInt(str);		
 		return new Date(time.longValue()*1000);
 	}
+	
 	// 2011-07-19T00:00:00+08:00
 	public static Date dateFromString(String str){
 		try {
@@ -73,7 +74,6 @@ public class StringUtil {
 	public static int intFromString(String str){
 		if (str == null || str.length() == 0)
 			return 0;
-		
 		Integer i = Integer.parseInt(str);
 		return i.intValue();
 	}

@@ -45,6 +45,20 @@ public class DateUtil {
 			return null;
 		}
 	}
+	
+	// timeZoneString format : GMT+0800
+	public static Date dateFromStringByFormat(String dateString, String format, String timeZoneString) {
+		if (dateString == null || format == null)
+			return null;
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		dateFormat.setTimeZone(TimeZone.getTimeZone(timeZoneString));
+		try {
+			return dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 
 	public static String dateDescription(Date date) {
 		if (date == null)
