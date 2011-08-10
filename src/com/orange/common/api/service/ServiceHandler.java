@@ -103,7 +103,15 @@ public class ServiceHandler {
 	}
 
 	void printResponse(HttpServletResponse reponse, String responseData) {
-		log.info("[SEND] response data = " + responseData);
+		String printStr = "";
+		int len = responseData.length();
+		if (len <= 100){
+			printStr = responseData;
+		}
+		else{
+			printStr = responseData.substring(0, 99).concat("..."); 
+		}
+		log.info("[SEND] response data = " + printStr);
 	}
 
 	void sendResponse(HttpServletResponse response, String responseData) {
