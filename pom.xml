@@ -52,6 +52,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>				
 	</properties>
 	<dependencies>
+	
+		<dependency>
+               <artifactId>solr-solrj</artifactId>
+               <groupId>org.apache.solr</groupId>
+               <version>3.3.0</version>
+               <type>jar</type>
+               <scope>compile</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.mongodb</groupId>
