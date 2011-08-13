@@ -15,6 +15,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
+
 public class MongoDBClient {
 
 	public static String ID = "_id";
@@ -273,6 +274,29 @@ public class MongoDBClient {
 			return collection.find().skip(offset).limit(limit);
 		}
 		return collection.find(query).skip(offset).limit(limit);
+	}
+
+	public boolean inc(String tableName, String keyFieldName, String keyFieldValue,
+			String counterName, int counterValue) {
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null) {
+			return false;
+		}
+		
+		if (keyFieldName == null || counterName == null)
+			return false;
+		
+		BasicDBObject query = new BasicDBObject();
+		query.put(keyFieldName, keyFieldValue);
+		
+		BasicDBObject inc = new BasicDBObject();
+		BasicDBObject incValue = new BasicDBObject();
+		incValue.put(counterName, counterValue);
+		inc.put("$inc", incValue);
+		
+		collection.update(query, inc);
+		return true;
 	}
 
 }
