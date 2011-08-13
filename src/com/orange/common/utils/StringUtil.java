@@ -72,8 +72,12 @@ public class StringUtil {
 	}
 	
 	public static int intFromString(String str){
-		if (str == null || str.length() == 0)
+		if (str == null || str.trim().length() == 0)
 			return 0;
+
+		if (!str.matches("[0-9]*"))
+			return 0;
+		
 		Integer i = Integer.parseInt(str);
 		return i.intValue();
 	}
