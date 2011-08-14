@@ -276,7 +276,7 @@ public class MongoDBClient {
 		return collection.find(query).skip(offset).limit(limit);
 	}
 
-	public boolean inc(String tableName, String keyFieldName, String keyFieldValue,
+	public boolean inc(String tableName, String keyFieldName, Object keyFieldValue,
 			String counterName, int counterValue) {
 
 		DBCollection collection = db.getCollection(tableName);
