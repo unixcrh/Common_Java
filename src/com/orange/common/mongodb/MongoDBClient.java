@@ -7,6 +7,7 @@ import java.util.Map;
 
 
 
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -14,6 +15,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+import org.bson.types.ObjectId;
 
 
 public class MongoDBClient {
@@ -177,6 +179,22 @@ public class MongoDBClient {
 		}
 		
 		return cursor;
+	}
+
+	public DBCursor findByIds(String tableName, String fieldName, List<ObjectId> valueList){
+		
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		DBObject in = new BasicDBObject();
+		DBObject query = new BasicDBObject();
+		if (valueList == null || valueList.size() == 0)
+			return null;
+		in.put("$in", valueList);
+		query.put(fieldName, in);
+		DBCursor result = collection.find(query);;
+		
+		return result;
 	}
 	
 	public DBCursor findByFieldInValues(String tableName, String fieldName,
