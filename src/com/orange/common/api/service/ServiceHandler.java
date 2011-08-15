@@ -105,11 +105,12 @@ public class ServiceHandler {
 	void printResponse(HttpServletResponse reponse, String responseData) {
 		String printStr = "";
 		int len = responseData.length();
-		if (len <= 100){
+		final int MAX_PRINT_LEN = 500;
+		if (len <= MAX_PRINT_LEN){
 			printStr = responseData;
 		}
 		else{
-			printStr = responseData.substring(0, 99).concat("..."); 
+			printStr = responseData.substring(0, MAX_PRINT_LEN).concat("..."); 
 		}
 		log.info("[SEND] response data = " + printStr);
 	}

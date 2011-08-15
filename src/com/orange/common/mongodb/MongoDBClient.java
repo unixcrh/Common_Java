@@ -145,6 +145,17 @@ public class MongoDBClient {
 		return collection.find(query).limit(limit);
 	}
 
+	public DBObject findOne(String tableName, DBObject query) {
+		if (query == null)
+			return null;
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		
+		return collection.findOne(query);
+	}
+	
 	public DBObject findOne(String tableName, Map<String, String> fieldValues) {
 		if (fieldValues == null)
 			return null;
