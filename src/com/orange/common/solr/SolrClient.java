@@ -7,7 +7,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
 public class SolrClient {
-	static final String SOLR_SERVER_URL = "http://localhost:8080/solr";
+	static final String SOLR_SERVER_URL = "http://localhost:8099/solr";
 	CommonsHttpSolrServer server;
 	
 	public static CommonsHttpSolrServer getSolrServer() {
