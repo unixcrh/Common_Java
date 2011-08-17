@@ -328,4 +328,13 @@ public class MongoDBClient {
 		return true;
 	}
 
+	public void updateOrInsert(String tableName, DBObject query, DBObject update) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return;
+
+		System.out.println("update/insert db, query = " + query.toString() + ", update = "+update.toString());
+		collection.update(query, update, true, false);		
+	}
+
 }
