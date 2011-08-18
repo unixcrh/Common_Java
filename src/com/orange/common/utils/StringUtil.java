@@ -2,16 +2,15 @@ package com.orange.common.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.DataFormatException;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -118,5 +117,25 @@ public class StringUtil {
 			return false;
 		else
 			return true;
+	}
+
+	public static boolean isValidMail(String mail){
+		if(null == mail) return false;
+    	
+		int length = mail.length();
+		if (length<10) {
+			return false;
+		}
+		String retMail = "^[a-zA-Z0-9_.\\-]{1,}@[a-zA-Z0-9_.\\-]{1,}\\.[a-zA-Z0-9_\\-.]{1,}$";
+
+		if ( Pattern.matches(retMail, mail)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static String randomUUID(){
+		return UUID.randomUUID().toString();
 	}
 }
