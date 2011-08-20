@@ -14,21 +14,21 @@ public class MailSender {
 	
 	String host = "smtp.163.com";
 	String from = "gckj123@163.com";
-	String to = "1124090522@qq.com";
+	String to = "";
 	String username = from;
 	String password = "gckj123456";
 //	String host = "smtp.sina.com.cn";
-//	String from = "gckj123@sina.com";
-//	String to = "jaja.422@163.com";
+//	String from = "gckj_dev@sina.com";
+//	String to = "";
 //	String username = from;
-//	String password = "gckj123";
+//	String password = "gckjdev123";
 
-	public static void main(String[] args) {
-		MailSender sm = new MailSender();
-		sm.send("1124090522@qq.com", "www.google.com");
-	}
-	
-	public void send(String email, String confirmUrl) {
+//	For Test
+//	public static void main(String[] args) {
+//		MailSender sm = new MailSender();
+//		sm.send("gckj123@163.com", "www.google.com");
+//	}
+	public void send(String to, String confirmUrl) {
 
 		try {
 			Properties props = new Properties();
