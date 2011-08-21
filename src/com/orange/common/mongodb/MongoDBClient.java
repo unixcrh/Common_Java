@@ -83,6 +83,25 @@ public class MongoDBClient {
 				false);
 	}
 	
+	public DBObject findAndModify(String tableName, String fieldName,
+            String findValue, String modifyValue) {
+
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return null;
+
+        DBObject query = new BasicDBObject();
+        query.put(fieldName, findValue);
+
+        DBObject update = new BasicDBObject();
+        DBObject updateValue = new BasicDBObject();
+        updateValue.put(fieldName, modifyValue);
+        update.put("$set", updateValue);
+
+        return collection.findAndModify(query, null, null, false, update, true,
+                false);
+    }
+	
 	public void updateAll(String tableName, DBObject query, DBObject update){
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
