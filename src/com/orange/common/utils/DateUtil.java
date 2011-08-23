@@ -85,5 +85,25 @@ public class DateUtil {
 		
 		return now.getTime();
 	}
+	
+	public static boolean isMiddleDate(int startHour, int startMinute, int endHour, int endMinute){
+	    
+	    Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        startCalendar.set(Calendar.HOUR_OF_DAY, startHour);
+        startCalendar.set(Calendar.MINUTE, startMinute);
+        endCalendar.set(Calendar.HOUR_OF_DAY, endHour);
+        endCalendar.set(Calendar.MINUTE, endMinute);
+        
+        Date startDate = startCalendar.getTime();
+        Date endDate = endCalendar.getTime();
+        Date curDate = new Date();
+        
+        if (curDate.after(startDate) && curDate.before(endDate)) {
+            return true;
+        }
+	    
+	    return false;
+	}
 
 }

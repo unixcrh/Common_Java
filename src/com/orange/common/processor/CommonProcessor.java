@@ -12,7 +12,7 @@ public abstract class CommonProcessor implements Runnable {
 	public static final Logger log = Logger.getLogger(CommonProcessor.class.getName());		
 	public static final BlockingQueue<BasicProcessorRequest> queue = new LinkedBlockingQueue<BasicProcessorRequest>();		
 	
-	public static BlockingQueue<BasicProcessorRequest> getQueue(){
+	public BlockingQueue<BasicProcessorRequest> getQueue(){
 		return queue;
 	}
 	
