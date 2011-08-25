@@ -3,7 +3,7 @@ package com.orange.common.processor;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import com.orange.common.mongodb.MongoDBClient;
 
@@ -12,7 +12,7 @@ public abstract class CommonProcessor implements Runnable {
 	public static final Logger log = Logger.getLogger(CommonProcessor.class.getName());		
 	public static final BlockingQueue<BasicProcessorRequest> queue = new LinkedBlockingQueue<BasicProcessorRequest>();		
 	
-	public static BlockingQueue<BasicProcessorRequest> getQueue(){
+	public BlockingQueue<BasicProcessorRequest> getQueue(){
 		return queue;
 	}
 	
@@ -25,7 +25,7 @@ public abstract class CommonProcessor implements Runnable {
 				printRequest(request);
 				request.execute(this);
 			} catch (InterruptedException e) {
-				log.severe("Processor catch InterruptedException while running. exception="+e.toString());
+				log.fatal("Processor catch InterruptedException while running. exception="+e.toString());
 			}
 		}
 
@@ -36,7 +36,7 @@ public abstract class CommonProcessor implements Runnable {
 			queue.put(request);
 			return true;
 		} catch (InterruptedException e) {
-			log.severe("<putRequest> catch InterruptedException while running. exception="+e.toString());
+			log.fatal("<putRequest> catch InterruptedException while running. exception="+e.toString());
 			return false;
 		}
 	}
@@ -52,11 +52,11 @@ public abstract class CommonProcessor implements Runnable {
 	}
 
 	public void warning(BasicProcessorRequest request, String logData){
-		log.warning(String.format("[%010d] %s", request.getRequestId(), logData));
+		log.warn(String.format("[%010d] %s", request.getRequestId(), logData));
 	}
 
 	public void severe(BasicProcessorRequest request, String logData){
-		log.severe(String.format("[%010d] %s", request.getRequestId(), logData));
+		log.fatal(String.format("[%010d] %s", request.getRequestId(), logData));
 	}	
 	
 	public abstract MongoDBClient getMongoDBClient();
