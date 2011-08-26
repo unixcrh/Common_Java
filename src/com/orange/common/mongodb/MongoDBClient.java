@@ -110,6 +110,15 @@ public class MongoDBClient {
 		System.out.println("update db, query = " + query.toString() + ", update = "+update.toString());
 		collection.update(query, update, false, true);
 	}
+	
+	public void updateOrInsertAll(String tableName, DBObject query, DBObject update){
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return;
+
+        System.out.println("update db, query = " + query.toString() + ", update = "+update.toString());
+        collection.update(query, update, true, true);
+    }
 
 	public DBObject findAndModify(String tableName,
 			Map<String, Object> equalCondition, Map<String, Object> updateMap) {
