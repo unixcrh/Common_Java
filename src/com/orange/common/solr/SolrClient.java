@@ -37,7 +37,19 @@ public class SolrClient {
 	
 	private SolrClient(){
 		try {
-			server = new CommonsHttpSolrServer(SOLR_SERVER_URL);
+			String address = System.getProperty("solr.address");
+			String portStr = System.getProperty("solr.port");
+			int port = 8099;
+			
+			if (address == null){
+				address = "localhost";
+			}
+			if (portStr != null){
+				port = Integer.parseInt(portStr);
+			}
+			
+			String solrURL = "http://".concat(address).concat(":").concat(String.valueOf(port)).concat("/solr");			
+			server = new CommonsHttpSolrServer(solrURL);
 		} catch (MalformedURLException e) {
 			e.printStackTrace(); //TODO
 		}
