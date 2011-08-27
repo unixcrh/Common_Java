@@ -2,13 +2,19 @@ package com.orange.common.solr;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.Timer;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
+
 public class SolrClient {
 	static final String SOLR_SERVER_URL = "http://localhost:8099/solr";
 	CommonsHttpSolrServer server;
+	
 	
 	public static CommonsHttpSolrServer getSolrServer() {
 		return getInstance().server;
@@ -60,6 +66,54 @@ public class SolrClient {
 		server.setFollowRedirects(false); // defaults to false
 		server.setAllowCompression(true);
 		server.setMaxRetries(1); // defaults to 0. > 1 not recommended.	
+		
+		long period = 1000 * 60 * 60 * 24;
+		Timer solrOptimizeTimer = new Timer();
+		solrOptimizeTimer.schedule(new SolrOptimizeTask(this), SolrOptimizeTask.getTaskDate(), period);
+		
 	}
+	
+	static class SolrOptimizeTask extends java.util.TimerTask{
+		
+		SolrClient solrClient;
+		
+		public SolrOptimizeTask (SolrClient solrClient){
+			this.solrClient = solrClient;
+		}
+		
+        @Override
+        public void run() {
+        	try {
+				solrClient.server.optimize();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
+        static public Date getTaskDate(){
+        	
+        	int scheduleHour = 1;		// 1 AM of the day
+        	
+    		TimeZone timeZone = TimeZone.getTimeZone("GMT+0800");
+    		Calendar now = Calendar.getInstance(timeZone);
+    		now.setTime(new Date());
+    		
+    		if (now.get(Calendar.HOUR_OF_DAY) >= scheduleHour){
+    			now.add(Calendar.DAY_OF_MONTH, 1);
+    		}
+    		
+    		now.set(Calendar.HOUR_OF_DAY, scheduleHour);
+    		now.set(Calendar.MINUTE, 0);
+    		now.set(Calendar.SECOND, 0);
+    		now.set(Calendar.MILLISECOND, 0);    			
+    		
+    		return now.getTime();
+        }
+    }
+	
 	
 }
