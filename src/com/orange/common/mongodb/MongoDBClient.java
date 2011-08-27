@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 
-
-
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -15,7 +15,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-import org.bson.types.ObjectId;
 
 
 public class MongoDBClient {
@@ -108,6 +107,33 @@ public class MongoDBClient {
 				false);
 	}
 	
+	public DBObject findAndModifyUpsert(String tableName, String fieldName,
+            int findValue, int modifyValue) {
+
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return null;
+
+        DBObject query = new BasicDBObject();
+        DBObject queryOr = new BasicDBObject();
+        query.put(fieldName, findValue);
+        queryOr.put(fieldName, null);
+        
+        DBObject queryCondition = new BasicDBObject();  
+        BasicDBList values = new BasicDBList();  
+        values.add(query);  
+        values.add(queryOr); 
+        queryCondition.put("$or", values);  
+          
+        DBObject update = new BasicDBObject();
+        DBObject updateValue = new BasicDBObject();
+        updateValue.put(fieldName, modifyValue);
+        update.put("$set", updateValue);
+        return collection.findAndModify(queryCondition, null, null, false, update, true,
+                false);
+       
+    }
+	
 	public DBObject findAndModify(String tableName, String fieldName,
             String findValue, String modifyValue) {
 
@@ -136,7 +162,7 @@ public class MongoDBClient {
 		collection.update(query, update, false, true);
 	}
 	
-	public void updateOrInsertAll(String tableName, DBObject query, DBObject update){
+	public void upsertAll(String tableName, DBObject query, DBObject update){
         DBCollection collection = db.getCollection(tableName);
         if (collection == null)
             return;
