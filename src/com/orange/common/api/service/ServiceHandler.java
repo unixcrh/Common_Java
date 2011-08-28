@@ -92,9 +92,10 @@ public class ServiceHandler {
 		}
 
 		String responseData = obj.getResponseString();
+		String responseType = obj.resultType;
 
 		// send back response
-		sendResponse(response, responseData);
+		sendResponse(response, responseData,responseType);
 
 	}
 
@@ -115,9 +116,9 @@ public class ServiceHandler {
 		log.info("[SEND] response data = " + printStr);
 	}
 
-	void sendResponse(HttpServletResponse response, String responseData) {
+	void sendResponse(HttpServletResponse response, String responseData, String responseType) {
 		printResponse(response, responseData);
-		response.setContentType("application/json; charset=utf-8");
+		response.setContentType(responseType);
 		try {
 			response.getWriter().write(responseData);
 			response.getWriter().flush();
@@ -128,6 +129,6 @@ public class ServiceHandler {
 
 	void sendResponseByErrorCode(HttpServletResponse response, int errorCode) {
 		String resultString = CommonErrorCode.getJSONByErrorCode(errorCode);
-		sendResponse(response, resultString);
+		sendResponse(response, resultString,CommonParameter.APPLICATION_JSON);
 	}
 }

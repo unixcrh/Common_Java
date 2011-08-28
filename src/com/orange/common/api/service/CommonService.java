@@ -17,6 +17,7 @@ public abstract class CommonService {
 	// response data
 	protected int resultCode = 0;
 	protected Object resultData = null;
+	protected String resultType = CommonParameter.APPLICATION_JSON;
 	
 	protected CassandraClient cassandraClient = null;
 	protected MongoDBClient mongoClient = null;
@@ -75,13 +76,19 @@ public abstract class CommonService {
 	public abstract void handleData();
 
 	public String getResponseString() {
-		JSONObject resultObject = new JSONObject();
-		if (resultData != null) {
-			resultObject.put(CommonParameter.RET_DATA, resultData);
-		}
-		resultObject.put(CommonParameter.RET_CODE, resultCode);
+	    String retString = "";
+	    if (resultCode == CommonParameter.VERIFY_SUCCESS){
+	        retString = CommonParameter.RESPONSE_VERIFY_SUCCESS;
+	    } else {
+	        JSONObject resultObject = new JSONObject();
+	        if (resultData != null) {
+	            resultObject.put(CommonParameter.RET_DATA, resultData);
+	        }
+	        resultObject.put(CommonParameter.RET_CODE, resultCode);
 
-		String retString = resultObject.toString();
+	        retString = resultObject.toString();
+	    }
+		
 		return retString;
 	}
 

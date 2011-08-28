@@ -17,6 +17,8 @@ public class ScheduleServer implements Runnable {
     
     private Class<?> processorClass;
     
+    private CommonProcessor processor;
+    
     private static int requestCounter = 0;
 
     private static long startTime = 0;
@@ -33,6 +35,32 @@ public class ScheduleServer implements Runnable {
         this.processorClass = processorClass;
         createProcessThreads(processorClass);
     }
+    
+    public ScheduleServer(CommonProcessor processor) {
+        this.processor = processor;
+        createProcessThreads(processor);
+    }
+    
+    public void createProcessThreads(CommonProcessor processor) {
+        processorList = new ArrayList<ScheduleServerProcessor>();
+        for (int i = 0; i < max_thread_num; i++) {
+            
+            ScheduleServerProcessor runnable = (ScheduleServerProcessor)processor;
+            processorList.add(runnable);
+            
+            Thread thread = new Thread(runnable);
+            thread.start();
+            if (i == 0) {
+                setQueue(runnable.getQueue());
+                setMongoDBClient(runnable.getMongoDBClient());
+            }
+        }
+        
+        if (queue == null) {
+            log.info("no queue available to use, application quit");
+            return;
+        }
+    }    
     
     public void createProcessThreads(Class<?> processorClass) throws InstantiationException, IllegalAccessException{
         processorList = new ArrayList<ScheduleServerProcessor>();
