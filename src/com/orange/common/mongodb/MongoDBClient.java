@@ -15,6 +15,8 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+
+
 import org.bson.types.ObjectId;
 
 public class MongoDBClient {
@@ -148,7 +150,7 @@ public class MongoDBClient {
         DBObject updateValue = new BasicDBObject();
         updateValue.put(fieldName, modifyValue);
         update.put("$set", updateValue);
-
+        
         return collection.findAndModify(query, null, null, false, update, true,
                 false);
     }
@@ -212,6 +214,7 @@ public class MongoDBClient {
 		return collection.findOne(query);
 	}
 	
+
 	public DBCursor find(String tableName, String fieldName,
 			String fieldValue, int limit) {
 
@@ -425,5 +428,14 @@ public class MongoDBClient {
 		query.put(fieldName, value);
 		return collection.findOne(query);
 	}
+
+    public DBObject findAndModifyInsert(String tableName, BasicDBObject query, BasicDBObject update) {
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return null;
+
+        return collection.findAndModify(query, null, null, false, update, true,
+                true);
+    }
 
 }
