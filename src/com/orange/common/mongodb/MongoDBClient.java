@@ -15,6 +15,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+
 import org.bson.types.ObjectId;
 
 
@@ -379,6 +380,16 @@ public class MongoDBClient {
 
 		System.out.println("update/insert db, query = " + query.toString() + ", update = "+update.toString());
 		collection.update(query, update, true, false);		
+	}
+
+	public DBObject findOne(String tableName, String fieldName, ObjectId value) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, value);
+		return collection.findOne(query);
 	}
 
 }
