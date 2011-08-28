@@ -15,7 +15,7 @@ public class ScheduleServer implements Runnable {
     
     MongoDBClient mongoClient = null;    
     
-    private Class<?> processorClass;
+    private CommonProcessor processor;
     
     private static int requestCounter = 0;
 
@@ -29,16 +29,16 @@ public class ScheduleServer implements Runnable {
     
     List<ScheduleServerProcessor> processorList;
     
-    public ScheduleServer(Class<?> processorClass) throws InstantiationException, IllegalAccessException{
-        this.processorClass = processorClass;
-        createProcessThreads(processorClass);
+    public ScheduleServer(CommonProcessor processor) {
+        this.processor = processor;
+        createProcessThreads(processor);
     }
     
-    public void createProcessThreads(Class<?> processorClass) throws InstantiationException, IllegalAccessException{
+    public void createProcessThreads(CommonProcessor processor) {
         processorList = new ArrayList<ScheduleServerProcessor>();
         for (int i = 0; i < max_thread_num; i++) {
             
-            ScheduleServerProcessor runnable = (ScheduleServerProcessor)processorClass.newInstance();
+            ScheduleServerProcessor runnable = (ScheduleServerProcessor)processor;
             processorList.add(runnable);
             
             Thread thread = new Thread(runnable);
@@ -54,7 +54,7 @@ public class ScheduleServer implements Runnable {
             return;
         }
     }    
-
+    
     public void setMongoDBClient(MongoDBClient mongoDBClient) {
         this.mongoClient = mongoDBClient;
     }

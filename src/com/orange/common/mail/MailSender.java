@@ -45,13 +45,13 @@ public class MailSender {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			message.setSubject("¸Ì³È¿Æ¼¼È·ÈÏ×¢²á");
+			message.setSubject("æŸ‘æ©™ç§‘æŠ€ç¡®è®¤æ³¨å†Œ");
 			message.setSentDate(new Date());
 			
 			BodyPart part = new MimeBodyPart();
-			String content = "ÄãºÃ£º<br> Çëµã»÷ÏÂÃæµÄÁ´½ÓÍê³É×¢²á£º<br><a href='"    
+			String content = "ä½ å¥½ï¼š<br> è¯·ç‚¹å‡»ä¸‹é¢çš„é“¾æ¥å®Œæˆæ³¨å†Œï¼š<br><a href='"    
 							+ confirmUrl + "'>"+ confirmUrl + "</a><br>" 
-							+ "Èç¹ûÒÔÉÏÁ´½ÓÎŞ·¨µã»÷£¬Çë½«ÉÏÃæµÄµØÖ·¸´ÖÆµ½ÄãµÄä¯ÀÀÆ÷¡£ ";
+							+ "å¦‚æœä»¥ä¸Šé“¾æ¥æ— æ³•ç‚¹å‡»ï¼Œè¯·å°†ä¸Šé¢çš„åœ°å€å¤åˆ¶åˆ°ä½ çš„æµè§ˆå™¨ã€‚ ";
 			part.setContent(content, "text/html;charset=gb2312");
 			Multipart mp = new MimeMultipart();
 			mp.addBodyPart(part);
