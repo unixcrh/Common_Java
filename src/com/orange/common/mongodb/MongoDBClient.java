@@ -15,12 +15,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-<<<<<<< HEAD
-=======
-
 import org.bson.types.ObjectId;
->>>>>>> origin/master
-
 
 public class MongoDBClient {
 
