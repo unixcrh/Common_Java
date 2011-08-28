@@ -13,11 +13,11 @@ public class CommonParameter {
 	public static final String PARA_TIMESTAMP = "ts";
 	public static final String PARA_MAC = "mac";
 	
-	public static final String TEXT_HTML = "";
+	public static final String TEXT_HTML = "text/html; charset=utf-8";
 	
 	public static final String APPLICATION_JSON = "application/json; charset=utf-8";
 	
 	public static final int  VERIFY_SUCCESS = 1;
-	public static final String RESPONSE_VERIFY_SUCCESS = "<html><h1 align='center'>注册成功/h1></html>";
+	public static final String RESPONSE_VERIFY_SUCCESS = "<html><h1 align='center'>注册成功</h1></html>";
 
 }
