@@ -25,7 +25,7 @@ public class ScheduleServer implements Runnable {
     
     private int max_thread_num = 5;
 
-    private int sleep_interval_for_no_request = 1000;
+    private int sleep_interval = 1000;
     
     List<ScheduleServerProcessor> processorList;
     
@@ -91,16 +91,17 @@ public class ScheduleServer implements Runnable {
                 
                 // if there is no record, sleep one second
                 if (request == null) {
-                    log.debug("no request, sleep "+sleep_interval_for_no_request+" ms");
-                    Thread.sleep(sleep_interval_for_no_request);
+                    log.debug("no request, sleep "+sleep_interval+" ms");
+                    Thread.sleep(sleep_interval);
                 } else {
                     queue.put(request);
                 }
 
                 flowControl();
 
-            } catch (Exception e) {
-                log.fatal("<ScheduleServer> catch Exception while running. exception="+e.toString());
+            }
+            catch (Exception e) {
+                log.fatal("<ScheduleServer> catch Exception while running. exception=" + e.toString());
             }
         }
     }
@@ -115,15 +116,16 @@ public class ScheduleServer implements Runnable {
 
             if (requestCounter == max_request_per_second) {
                 long duration = System.currentTimeMillis() - startTime;
-                if (duration < sleep_interval_for_no_request) {
-                    long sleepTime = sleep_interval_for_no_request - duration;
+                if (duration < sleep_interval) {
+                    long sleepTime = sleep_interval - duration;
                     log.info("sleep " + sleepTime + " milliseconds for flow control");
                     Thread.sleep(sleepTime);
                 }
                 requestCounter = 0;
             }
-        } catch (InterruptedException e) {
-            log.fatal("<ScheduleServer> catch Exception while running. exception="+e.toString());
+        }
+        catch (InterruptedException e) {
+            log.fatal("<ScheduleServer> catch Exception while running. exception=" + e.toString());
         }
 
     }
@@ -136,8 +138,8 @@ public class ScheduleServer implements Runnable {
         this.max_thread_num = max_thread_num;
     }
 
-    public void setSleep_interval_for_no_request(int sleep_interval_for_no_request) {
-        this.sleep_interval_for_no_request = sleep_interval_for_no_request;
+    public void setSleep_interval_for_no_request(int sleep_interval) {
+        this.sleep_interval = sleep_interval;
     }
 
     
