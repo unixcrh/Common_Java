@@ -15,8 +15,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-
-
 import org.bson.types.ObjectId;
 
 public class MongoDBClient {
@@ -154,7 +152,7 @@ public class MongoDBClient {
         return collection.findAndModify(query, null, null, false, update, true,
                 false);
     }
-	
+
 	public void updateAll(String tableName, DBObject query, DBObject update){
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
