@@ -5,12 +5,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 
 public abstract class BasicService {
 
@@ -113,16 +113,16 @@ public abstract class BasicService {
 	        result = parseResponseCode(connection.getResponseCode());
                        
 		} catch (MalformedURLException e) {
-			log.severe("send urbanairship request, url="+urlString+", catch MalformedURLException="+e.toString());
+			log.error("send urbanairship request, url="+urlString+", catch MalformedURLException="+e.toString());
 			return ErrorCode.ERROR_PUSH_URL_NULL;
 		} catch (IOException e) {
-			log.severe("send urbanairship request, catch IOException="+e.toString());
+			log.error("send urbanairship request, catch IOException="+e.toString());
 			result = ErrorCode.ERROR_PUSH_IOEXCETION;			
 		} catch (JSONException e) {
-			log.severe("send urbanairship request, catch JSONException="+e.toString());
+			log.error("send urbanairship request, catch JSONException="+e.toString());
 			result = ErrorCode.ERROR_PUSH_JSON_EXCEPTION;		
 		} catch (Exception e){
-			log.severe("send urbanairship request, catch Exception="+e.toString());
+			log.error("send urbanairship request, catch Exception="+e.toString());
 			result = ErrorCode.ERROR_PUSH_GENERAL_EXCEPTION;
 		} finally {
 			if (connection != null){

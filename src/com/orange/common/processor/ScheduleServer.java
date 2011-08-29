@@ -91,7 +91,7 @@ public class ScheduleServer implements Runnable {
                 
                 // if there is no record, sleep one second
                 if (request == null) {
-                    log.info("no request, sleep.");
+                    log.debug("no request, sleep "+sleep_interval_for_no_request+" ms");
                     Thread.sleep(sleep_interval_for_no_request);
                 } else {
                     queue.put(request);
