@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 
 import com.orange.common.mongodb.MongoDBClient;
+import com.orange.common.utils.StringUtil;
 
 public class ScheduleServer implements Runnable {
     
@@ -21,9 +22,9 @@ public class ScheduleServer implements Runnable {
 
     private static long startTime = 0;
     
-    private int max_request_per_second = 20;
+    private int request_frequency = 20;
     
-    private int max_thread_num = 5;
+    private int threadNum = 5;
 
     private int sleep_interval = 1000;
     
@@ -31,12 +32,25 @@ public class ScheduleServer implements Runnable {
     
     public ScheduleServer(CommonProcessor processor) {
         this.processor = processor;
+        loadParam();
         createProcessThreads(processor);
     }
     
+    public void loadParam() {
+        if ( !StringUtil.isEmpty(System.getProperty("scheduleserver.request_frequency"))) {
+            this.request_frequency = Integer.parseInt(System.getProperty("scheduleserver.frequency"));
+        }
+        if ( !StringUtil.isEmpty(System.getProperty("scheduleserver.threadNum"))) {
+            this.threadNum = Integer.parseInt(System.getProperty("scheduleserver.threadnum"));
+        }
+        if ( !StringUtil.isEmpty(System.getProperty("scheduleserver.sleep_interval"))) {
+            this.sleep_interval = Integer.parseInt(System.getProperty("scheduleserver.c"));
+        }
+    }
+
     public void createProcessThreads(CommonProcessor processor) {
         processorList = new ArrayList<ScheduleServerProcessor>();
-        for (int i = 0; i < max_thread_num; i++) {
+        for (int i = 0; i < threadNum; i++) {
             
             ScheduleServerProcessor runnable = (ScheduleServerProcessor)processor;
             processorList.add(runnable);
@@ -114,7 +128,7 @@ public class ScheduleServer implements Runnable {
                 startTime = System.currentTimeMillis();
             }
 
-            if (requestCounter == max_request_per_second) {
+            if (requestCounter == request_frequency) {
                 long duration = System.currentTimeMillis() - startTime;
                 if (duration < sleep_interval) {
                     long sleepTime = sleep_interval - duration;
@@ -130,17 +144,17 @@ public class ScheduleServer implements Runnable {
 
     }
 
-    public void setMax_request_per_second(int max_request_per_second) {
-        this.max_request_per_second = max_request_per_second;
+    public void setFrequency(int frequecy) {
+        this.request_frequency = frequecy;
     }
 
-    public void setMax_thread_num(int max_thread_num) {
-        this.max_thread_num = max_thread_num;
+    public void setThreadNum(int threadNum) {
+        this.threadNum = threadNum;
     }
 
-    public void setSleep_interval_for_no_request(int sleep_interval) {
-        this.sleep_interval = sleep_interval;
+    public void setInterval(int interval) {
+        this.sleep_interval = interval;
     }
 
-    
+
 }
