@@ -86,6 +86,16 @@ public class DateUtil {
 		return now.getTime();
 	}
 	
+
+	public static Date getGMT8Date(){
+
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0800");
+        Calendar now = Calendar.getInstance(timeZone);
+        now.setTime(new Date());
+        
+        return now.getTime();
+    }
+
 	public static int calcHour(Date startDate, Date endDate) {
 		if (startDate.before(endDate)) {
 			long start = startDate.getTime();

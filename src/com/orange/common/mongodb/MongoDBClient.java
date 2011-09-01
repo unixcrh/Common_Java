@@ -92,6 +92,7 @@ public class MongoDBClient {
 		return true;
 	}
 
+	// upsert = false
 	public DBObject findAndModify(String tableName, String fieldName,
 			int findValue, int modifyValue) {
 
@@ -138,6 +139,7 @@ public class MongoDBClient {
        
     }
 	
+    //returnNew = true
 	public DBObject findAndModify(String tableName, String fieldName,
             String findValue, String modifyValue) {
 
@@ -153,6 +155,17 @@ public class MongoDBClient {
         updateValue.put(fieldName, modifyValue);
         update.put("$set", updateValue);
         
+        return collection.findAndModify(query, null, null, false, update, true,
+                false);
+    }
+	
+	//returnNew = true
+    public DBObject findAndModifyNew(String tableName, DBObject query, DBObject update) {
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return null;
+
+        System.out.println("update db, query = " + query.toString() + ", update = " + update.toString());
         return collection.findAndModify(query, null, null, false, update, true,
                 false);
     }
@@ -175,6 +188,7 @@ public class MongoDBClient {
         collection.update(query, update, true, true);
     }
 
+	//returnNew = false
 	public DBObject findAndModify(String tableName,
 			Map<String, Object> equalCondition, Map<String, Object> updateMap) {
 		DBCollection collection = db.getCollection(tableName);
