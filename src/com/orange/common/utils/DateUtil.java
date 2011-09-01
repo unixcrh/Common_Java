@@ -86,6 +86,7 @@ public class DateUtil {
 		return now.getTime();
 	}
 	
+
 	public static Date getGMT8Date(){
 
         TimeZone timeZone = TimeZone.getTimeZone("GMT+0800");
@@ -94,6 +95,18 @@ public class DateUtil {
         
         return now.getTime();
     }
+
+	public static int calcHour(Date startDate, Date endDate) {
+		if (startDate.before(endDate)) {
+			long start = startDate.getTime();
+			long end = endDate.getTime();
+			int hours =  (int) ((end - start) / (3600L * 1000)); 
+			return hours;
+		} else {
+			return -1;
+		}
+
+	}
 	
 	public static boolean isMiddleDate(int startHour, int startMinute, int endHour, int endMinute){
 	    
