@@ -86,6 +86,15 @@ public class DateUtil {
 		return now.getTime();
 	}
 	
+	public static Date getGMT8Date(){
+
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0800");
+        Calendar now = Calendar.getInstance(timeZone);
+        now.setTime(new Date());
+        
+        return now.getTime();
+    }
+	
 	public static boolean isMiddleDate(int startHour, int startMinute, int endHour, int endMinute){
 	    
 	    Calendar startCalendar = Calendar.getInstance();
