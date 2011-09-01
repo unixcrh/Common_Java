@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBList;
@@ -15,9 +16,12 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+
 import org.bson.types.ObjectId;
 
 public class MongoDBClient {
+	
+	public static final Logger log = Logger.getLogger(MongoDBClient.class.getName());
 
 	public static String ID = "_id";
 
@@ -158,7 +162,7 @@ public class MongoDBClient {
 		if (collection == null)
 			return;
 
-		System.out.println("update db, query = " + query.toString() + ", update = "+update.toString());
+		log.info("<updateAll> query = " + query.toString() + ", update = "+update.toString());
 		collection.update(query, update, false, true);
 	}
 	
@@ -167,7 +171,7 @@ public class MongoDBClient {
         if (collection == null)
             return;
 
-        System.out.println("update db, query = " + query.toString() + ", update = "+update.toString());
+        log.info("<upsertAll> query = " + query.toString() + ", update = "+update.toString());
         collection.update(query, update, true, true);
     }
 
@@ -187,7 +191,7 @@ public class MongoDBClient {
 		updateValue.putAll(updateMap);
 		update.put("$set", updateValue);
 
-		System.out.println("query = " + query.toString() + ", update = "+update.toString());
+		log.info("<findAndModify> query = " + query.toString() + ", update = "+update.toString());
 		return collection.findAndModify(query, update);
 	}
 
@@ -343,7 +347,7 @@ public class MongoDBClient {
 		DBObject query = new BasicDBObject();
 		query.put(gpsFieldName, near);
 
-		System.out.println(query.toString());
+		log.info("<findNearby>" + query.toString());
 
 		DBCursor result = collection.find(query).skip(offset).limit(count);
 		return result;

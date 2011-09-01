@@ -6,12 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -75,9 +75,7 @@ public abstract class CommonApiServer extends AbstractHandler
 	        getServiceHandler().handlRequest(request, response);
                        
 		} catch (Exception e){
-
-			log.severe("catch Exception="+e.toString());
-		
+			log.error("<handleHttpServletRequest> catch Exception="+e.toString());		
 		} finally {
 		}		
     }
