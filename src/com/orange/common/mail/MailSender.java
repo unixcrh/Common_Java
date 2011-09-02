@@ -2,11 +2,10 @@ package com.orange.common.mail;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
+
+import org.apache.log4j.Logger;
+
 import java.util.*;
-import java.util.logging.Logger;
 
 public class MailSender {
 	

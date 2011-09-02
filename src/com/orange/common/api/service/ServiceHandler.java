@@ -1,10 +1,11 @@
 package com.orange.common.api.service;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import net.sf.json.JSONException;
 
@@ -78,15 +79,15 @@ public class ServiceHandler {
 			obj.handleData();
 		} catch (HectorException e) {
 			obj.resultCode = CommonErrorCode.ERROR_CASSANDRA;
-			log.severe("catch DB exception=" + e.toString());
+			log.error("catch DB exception=" + e.toString());
 			e.printStackTrace();
 		} catch (JSONException e) {
 			obj.resultCode = CommonErrorCode.ERROR_JSON;
-			log.severe("catch JSON exception=" + e.toString());
+			log.error("catch JSON exception=" + e.toString());
 			e.printStackTrace();
 		} catch (Exception e) {
 			obj.resultCode = CommonErrorCode.ERROR_SYSTEM;
-			log.severe("catch general exception=" + e.toString());
+			log.error("catch general exception=" + e.toString());
 			e.printStackTrace();
 		} finally {
 		}
@@ -123,7 +124,7 @@ public class ServiceHandler {
 			response.getWriter().write(responseData);
 			response.getWriter().flush();
 		} catch (IOException e) {
-			log.severe("sendResponse, catch exception=" + e.toString());
+			log.error("sendResponse, catch exception=" + e.toString());
 		}
 	}
 

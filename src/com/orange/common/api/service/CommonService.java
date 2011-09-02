@@ -3,9 +3,10 @@ package com.orange.common.api.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 
 import net.sf.json.JSONObject;
 
@@ -109,7 +110,7 @@ public abstract class CommonService {
 	public boolean validateSecurity(HttpServletRequest request) {
 
 		if (needSecurityCheck() == false) {
-			log.warning("<validateSecurity> skip security check");
+			log.warn("<validateSecurity> skip security check");
 			return true;
 		}
 
@@ -131,7 +132,7 @@ public abstract class CommonService {
 		String input = timeStamp + SHARE_KEY;
 		String encodeStr = StringUtil.md5base64encode(input);
 		if (encodeStr == null) {
-			log.warning("<validateSecurity> failure, input=" + input
+			log.warn("<validateSecurity> failure, input=" + input
 					+ ",client mac=" + mac + ",server mac=null");
 			return false;
 		}
@@ -141,7 +142,7 @@ public abstract class CommonService {
 					+ mac + ",server mac=" + encodeStr);
 			return true;
 		} else {
-			log.warning("<validateSecurity> failure, input=" + input
+			log.warn("<validateSecurity> failure, input=" + input
 					+ ",client mac=" + mac + ",server mac=" + encodeStr);
 			return false;
 		}
