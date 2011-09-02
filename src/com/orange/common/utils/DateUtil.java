@@ -34,7 +34,7 @@ public class DateUtil {
 	}
 			
 	public static Date dateFromStringByFormat(String dateString, String format) {
-		if (dateString == null || format == null)
+		if (dateString == null || dateString.length() == 0 || format == null)
 			return null;
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
