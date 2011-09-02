@@ -453,4 +453,12 @@ public class MongoDBClient {
                 true);
     }
 
+	public DBCursor findAll(String tableName) {
+		DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return null;
+
+        return collection.find();
+	}
+
 }
