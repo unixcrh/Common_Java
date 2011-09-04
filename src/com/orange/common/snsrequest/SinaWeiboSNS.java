@@ -7,23 +7,14 @@ import java.util.concurrent.BlockingQueue;
 import weibo4j.Status;
 import weibo4j.Weibo;
 
-public class SinaWeiboSNS extends SNS {
-
-	public SinaWeiboSNS(String consumerKey, String consumerSecret,
-			BlockingQueue<SNSRequest> snsRequestQueue) {
-		super(consumerKey, consumerSecret, snsRequestQueue);
-	}
-
-	public SinaWeiboSNS() {
-		super();
-	}
+public class SinaWeiboSNS extends SNS {	
 
 	public SinaWeiboSNS(String consumerKey, String consumerSecret) {
 		super(consumerKey, consumerSecret);
 	}
 
 	@Override
-	public void publishSNSRequest(String consumerKey, String consumerSecret,
+	public void publishWeibo(String consumerKey, String consumerSecret,
 			SNSRequest request) {
 		if (!SNSRequestManager.checkConsumerToken(consumerKey, consumerSecret)) {
 			log.info("<SinaWeiboSNS.publishSNSRequest>: "
@@ -51,7 +42,7 @@ public class SinaWeiboSNS extends SNS {
 				status = sinaWeibo.uploadStatus(text, file);
 			}
 			if (status == null) {
-				log.info("<SinaWeiboSNS.publishSNSRequest>: "
+				log.info("<SinaWeiboSNS.publishWeibo>: "
 						+ "update weibo status is null!");
 			}
 		} catch (Exception ioe) {

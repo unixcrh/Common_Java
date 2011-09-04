@@ -80,13 +80,13 @@ public class SNSRequestManager {
 			secret = manager.getQQWeiboConsumerSecret();
 			if (!checkConsumerToken(key, secret))
 				return null;
-			return new QQWeiboSNS(key, secret, snsRequestQueue);
+			return new QQWeiboSNS(key, secret);
 		case SNSRequest.REQUEST_Type_SINA_WEIBO:
 			key = manager.getSinaWeiboConsumerKey();
 			secret = manager.getSinaWeiboConsumerSecret();
 			if (!checkConsumerToken(key, secret))
 				return null;
-			return new SinaWeiboSNS(key, secret, snsRequestQueue);
+			return new SinaWeiboSNS(key, secret);
 		default:
 			return null;
 		}
@@ -129,17 +129,23 @@ public class SNSRequestManager {
 		}
 	}
 
+	private void putSNSRequest(SNSRequest request) throws InterruptedException {
+		snsRequestQueue.put(request);
+	}
+
+	private SNSRequest getSNSRequest(SNSRequest request) throws InterruptedException {
+		return snsRequestQueue.take();
+	}
+	
 	public void putSNSRequest(int snsRequestType, String text, File iamgeFile,
 			String tokenKey, String tokenSecret) throws InterruptedException {
 		SNSRequest request = new SNSRequest(snsRequestType, text, iamgeFile,
 				tokenKey, tokenSecret);
 		SNS sns = SNSFactory(snsRequestType, snsRequestQueue, this);
 		if (sns == null) {
-			log
-					.info("<SNSRequestManager.putSNSRequest>:fail to create sns instance.");
+			log.info("<SNSRequestManager.putSNSRequest>:fail to create sns instance.");
 		}
-		sns.putSNSRequest(request);
-
+		putSNSRequest(request);
 	}
 
 	public void setQQWeiboConsumerKey(String qQWeiboConsumerKey) {

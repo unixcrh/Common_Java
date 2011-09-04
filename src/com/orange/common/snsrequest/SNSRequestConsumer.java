@@ -19,10 +19,10 @@ public class SNSRequestConsumer implements Runnable {
 		SNS sns = SNSRequestManager.SNSFactory(type, snsRequestManager);
 		String consumerKey = sns.getConsumerKey();
 		String consumerSecret = sns.getConsumerSecret();
-		sns.publishSNSRequest(consumerKey, consumerSecret, request);
+		sns.publishWeibo(consumerKey, consumerSecret, request);
 	}
 
-	private boolean isRuestCountEnough() {
+	private boolean isRequestCountEnough() {
 		if (SNSRequestManager.requestCount.longValue() < SNSRequestManager.MAX_REQUEST_COUNT_PER_INTERVAL) {
 			return false;
 		}
@@ -33,7 +33,7 @@ public class SNSRequestConsumer implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		while (true) {
-			if (isRuestCountEnough()) {
+			if (isRequestCountEnough()) {
 				long time = DateUtil.getCurrentTime();
 				long interval = time - SNSRequestManager.lasttime.get();
 				if (interval > SNSRequestManager.INTERVAL) {
@@ -53,7 +53,7 @@ public class SNSRequestConsumer implements Runnable {
 			} else {
 				SNSRequest request = null;
 				try {
-					if (!isRuestCountEnough())
+					if (!isRequestCountEnough())
 						request = snsRequestQueue.take();
 				} catch (InterruptedException e) {
 					SNSRequestManager.log.info("<SNSRequestConsumer.run>: "

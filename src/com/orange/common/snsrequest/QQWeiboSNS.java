@@ -8,25 +8,16 @@ import com.mime.qweibo.examples.QWeiboType.ResultType;
 
 public class QQWeiboSNS extends SNS {
 
-	public QQWeiboSNS(String consumerKey, String consumerSecret,
-			BlockingQueue<SNSRequest> snsRequestQueue) {
-		super(consumerKey, consumerSecret, snsRequestQueue);
-	}
-
-	public QQWeiboSNS() {
-		super();
-	}
-
 	public QQWeiboSNS(String consumerKey, String consumerSecret) {
 		super(consumerKey, consumerSecret);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void publishSNSRequest(String consumerKey, String consumerSecret,
+	public void publishWeibo(String consumerKey, String consumerSecret,
 			SNSRequest request) {
 		if (!SNSRequestManager.checkConsumerToken(consumerKey, consumerSecret)) {
-			log.info("<QQWeiboSNS.publishSNSRequest>: "
+			log.info("<QQWeiboSNS.publishWeibo>: "
 					+ "consumerKey and consumerSecret is null or empty!");
 			return;
 		}
