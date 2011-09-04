@@ -461,7 +461,7 @@ public class MongoDBClient {
         return collection.find();
 	}
 	
-	public DBCursor find(String tableName, String fieldName,
+/*	public DBCursor find(String tableName, String fieldName,
 			String fieldValue) {
 
 		DBCollection collection = db.getCollection(tableName);
@@ -471,6 +471,6 @@ public class MongoDBClient {
 		DBObject query = new BasicDBObject();
 		query.put(fieldName, fieldValue);
 		return collection.find(query);
-	}
+	}*/
 
 }
