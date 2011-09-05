@@ -217,7 +217,7 @@ public class MongoDBClient {
 		collection.save(docObject);
 		return;
 	}
-
+	
 	public DBObject findOne(String tableName, String fieldName,
 			String fieldValue) {
 
@@ -229,6 +229,7 @@ public class MongoDBClient {
 		query.put(fieldName, fieldValue);
 		return collection.findOne(query);
 	}
+	
 	
 
 	public DBCursor find(String tableName, String fieldName,
@@ -253,6 +254,20 @@ public class MongoDBClient {
 		
 		return collection.findOne(query);
 	}
+	
+    public boolean removeOne(String tableName, DBObject query) {
+        if (query == null)
+            return false;
+        DBObject doc = findOne(tableName, query);
+
+        DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return false;
+
+        collection.remove(doc);
+        return true;
+    }
+
 	
 	public DBObject findOne(String tableName, Map<String, String> fieldValues) {
 		if (fieldValues == null)
