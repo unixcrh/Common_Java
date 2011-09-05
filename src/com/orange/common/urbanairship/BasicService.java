@@ -82,7 +82,7 @@ public abstract class BasicService {
 				
 		if (requestMethod == null)
 			return ErrorCode.ERROR_PUSH_NO_REQUESTMETHOD;
-
+		
 		URL url = null;		
 		String urlString = getURL();
 		HttpURLConnection connection = null;

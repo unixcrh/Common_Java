@@ -120,7 +120,7 @@ public class PushMessageService extends BasicService {
 				
 		requestJSON.put(RequestPara.PARA_APS, aps);
 		
-		return false;
+		return true;
 	}
 
 }
