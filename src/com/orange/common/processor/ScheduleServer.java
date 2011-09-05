@@ -116,6 +116,7 @@ public class ScheduleServer implements Runnable {
             }
             catch (Exception e) {
                 log.fatal("<ScheduleServer> catch Exception while running. exception=" + e.toString());
+                e.printStackTrace();
             }
         }
     }
