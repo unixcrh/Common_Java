@@ -17,8 +17,6 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
-import org.bson.types.ObjectId;
-
 public class MongoDBClient {
 	
 	public static final Logger log = Logger.getLogger(MongoDBClient.class.getName());
@@ -253,6 +251,27 @@ public class MongoDBClient {
 			return null;
 		
 		return collection.findOne(query);
+	}
+	
+	public void pullArrayKey(String tableName, DBObject query, String ArrayName, String key, String keyValue) {
+	    if (query == null) {
+	        return ;
+	    }
+	    DBCollection collection = db.getCollection(tableName);
+        if (collection == null)
+            return ;
+        
+        BasicDBObject pull = new BasicDBObject();
+        BasicDBObject pullValue = new BasicDBObject();
+        pullValue.put(key, keyValue);
+        
+        pull.put(ArrayName, pullValue);
+        
+        BasicDBObject update = new BasicDBObject();
+        update.put("$pull", pull);
+        
+        log.info("query=" + query + " update=" + update);
+        updateAll(tableName, query, update);
 	}
 	
     public boolean removeOne(String tableName, DBObject query) {
