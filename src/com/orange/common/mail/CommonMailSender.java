@@ -26,6 +26,7 @@ public class CommonMailSender {
 	String username = from;
 	String password = "gckj123456";
 	String title;
+	String imageUrl;
 	Object content;
 
 //	String host = "smtp.sina.com.cn";
@@ -60,9 +61,14 @@ public class CommonMailSender {
 			message.setSentDate(new Date());
 			
 			BodyPart part = new MimeBodyPart();
-			part.setContent(content, "text/html;charset=gb2312");
+			//MimeBodyPart imagePart = new MimeBodyPart();
+			//imagePart.setHeader("Content-Location", imageUrl);
+			//imagePart.setContent(imageUrl, "text/html;charset=gb2312");
+			part.setContent(content.toString(), "text/html;charset=gb2312");
 			Multipart mp = new MimeMultipart();
 			mp.addBodyPart(part);
+			//mp.addBodyPart(imagePart);
+			
 			message.setContent(mp);
 
 			message.saveChanges();
@@ -78,11 +84,12 @@ public class CommonMailSender {
 
 	}
 
-public CommonMailSender(String to, String title, Object content) {
+public CommonMailSender(String to, String title, Object content,String imageUrl) {
 	super();
 	this.to = to;
 	this.title = title;
 	this.content = content;
+	this.imageUrl = imageUrl;
 }
 
 
