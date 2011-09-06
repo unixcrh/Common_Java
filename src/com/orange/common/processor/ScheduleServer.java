@@ -1,7 +1,11 @@
 package com.orange.common.processor;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 
@@ -10,6 +14,8 @@ import com.orange.common.utils.StringUtil;
 
 public class ScheduleServer implements Runnable {
     
+	public static int UNDEFINE_HOUR = -1;
+	
     Logger log = Logger.getLogger(ScheduleServer.class.getName());
 
     BlockingQueue<BasicProcessorRequest> queue = null;
@@ -22,13 +28,16 @@ public class ScheduleServer implements Runnable {
 
     private static long startTime = 0;
     
-    private int request_frequency = 20;
-    
+    private int request_frequency = 20;    
     private int threadNum = 5;
-
     private int sleep_interval = 1000;
+    private int resetHour = UNDEFINE_HOUR;
     
-    List<ScheduleServerProcessor> processorList;
+    public int getResetHour() {
+		return resetHour;
+	}
+
+	List<ScheduleServerProcessor> processorList;
     
     public ScheduleServer(CommonProcessor processor) {
         this.processor = processor;
@@ -90,6 +99,8 @@ public class ScheduleServer implements Runnable {
         log.info("reset all running message.");
         processor.resetAllRunningMessage();
 
+        scheduleResetTimer();
+        
         while (true) {
             try {
                 
@@ -121,7 +132,19 @@ public class ScheduleServer implements Runnable {
         }
     }
 
-    private void flowControl() {
+    private void scheduleResetTimer() {
+        Timer resetTaskTimer = new Timer();
+        Date fireDate = ResetTaskTimer.getTaskDate(resetHour);
+        if (fireDate != null){
+        	log.info("schedule reset task timer at " + fireDate.toString());
+        	resetTaskTimer.schedule(new ResetTaskTimer(this), fireDate);
+        }
+        else {
+        	log.info("no reset task timer set, reset hour = " + resetHour);
+        }
+	}
+
+	private void flowControl() {
         try {
             requestCounter++;
 
@@ -157,5 +180,55 @@ public class ScheduleServer implements Runnable {
         this.sleep_interval = interval;
     }
 
+	public void setResetHour(int resetHour) {
+		this.resetHour = resetHour;
+	}
 
+	// reset and activate all task in DB 
+	static class ResetTaskTimer extends java.util.TimerTask{
+		
+		ScheduleServer scheduleServer;
+		private static Logger log = Logger.getLogger(ResetTaskTimer.class.getName());
+		
+		public ResetTaskTimer(ScheduleServer server){
+			this.scheduleServer = server;
+		}
+		
+        @Override
+        public void run() {
+        	
+        	// reset all running message
+    		scheduleServer.getFirstProcessor().resetAllRunningMessage();
+    		
+    		// set next timer
+    		Date fireDate = ResetTaskTimer.getTaskDate(scheduleServer.getResetHour());
+    		if (fireDate != null){
+    			Timer newResetTaskTimer = new Timer();
+				newResetTaskTimer.schedule(new ResetTaskTimer(scheduleServer), fireDate);
+    		}
+        }
+        
+        static public Date getTaskDate(int scheduleHour){
+        	
+        	if (scheduleHour < 0 || scheduleHour >= 24){
+        		return null;
+        	}
+        	
+    		TimeZone timeZone = TimeZone.getTimeZone("GMT+0800");
+    		Calendar now = Calendar.getInstance(timeZone);
+    		now.setTime(new Date());
+    		
+    		if (now.get(Calendar.HOUR_OF_DAY) >= scheduleHour){
+    			now.add(Calendar.DAY_OF_MONTH, 1);
+    		}
+    		
+    		now.set(Calendar.HOUR_OF_DAY, scheduleHour);
+    		now.set(Calendar.MINUTE, 0);
+    		now.set(Calendar.SECOND, 0);
+    		now.set(Calendar.MILLISECOND, 0);    			
+    		
+        	log.info("<getTaskDate> next timer set to "+now.getTime().toString());    		
+    		return now.getTime();
+        }
+    }
 }

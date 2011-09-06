@@ -18,5 +18,4 @@ public class ErrorCode {
 	public static final int ERROR_PUSH_MESSAGE_FAILURE = 860008;
 	public static final int ERROR_PUSH_REGISTER_FAILURE = 860009;
 
-	public static final int ERROR_PUSH_DEVICE_TOKEN_NULL = 860010;
 }
