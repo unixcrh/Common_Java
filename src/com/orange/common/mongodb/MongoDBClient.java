@@ -163,7 +163,7 @@ public class MongoDBClient {
         if (collection == null)
             return null;
 
-        System.out.println("update db, query = " + query.toString() + ", update = " + update.toString());
+//        System.out.println("update db, query = " + query.toString() + ", update = " + update.toString());
         return collection.findAndModify(query, null, null, false, update, true,
                 false);
     }
