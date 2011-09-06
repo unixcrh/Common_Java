@@ -79,16 +79,13 @@ public class ServiceHandler {
 			obj.handleData();
 		} catch (HectorException e) {
 			obj.resultCode = CommonErrorCode.ERROR_CASSANDRA;
-			log.error("catch DB exception=" + e.toString());
-			e.printStackTrace();
+			log.error("catch DB exception=" + e.toString(), e);
 		} catch (JSONException e) {
 			obj.resultCode = CommonErrorCode.ERROR_JSON;
-			log.error("catch JSON exception=" + e.toString());
-			e.printStackTrace();
+			log.error("catch JSON exception=" + e.toString(), e);
 		} catch (Exception e) {
 			obj.resultCode = CommonErrorCode.ERROR_SYSTEM;
-			log.error("catch general exception=" + e.toString());
-			e.printStackTrace();
+			log.error("catch general exception=" + e.toString(), e);
 		} finally {
 		}
 
