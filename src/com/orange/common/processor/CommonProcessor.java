@@ -25,8 +25,8 @@ public abstract class CommonProcessor implements Runnable {
                 printRequest(request);
                 request.execute(this);
             }
-            catch (InterruptedException e) {
-                log.fatal("Processor catch InterruptedException while running. exception=" + e.toString());
+            catch (Exception e) {
+                log.error("Processor catch exception=" + e.toString(), e);
             }
         }
 
@@ -37,8 +37,8 @@ public abstract class CommonProcessor implements Runnable {
             queue.put(request);
             return true;
         }
-        catch (InterruptedException e) {
-            log.fatal("<putRequest> catch InterruptedException while running. exception=" + e.toString());
+        catch (Exception e) {
+            log.error("<putRequest> catch InterruptedException while running. exception=" + e.toString(), e);
             return false;
         }
     }
