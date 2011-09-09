@@ -113,16 +113,16 @@ public abstract class BasicService {
 	        result = parseResponseCode(connection.getResponseCode());
                        
 		} catch (MalformedURLException e) {
-			log.error("send urbanairship request, url="+urlString+", catch MalformedURLException="+e.toString());
+			log.error("send urbanairship request, url="+urlString+", catch MalformedURLException="+e.toString(), e);
 			return ErrorCode.ERROR_PUSH_URL_NULL;
 		} catch (IOException e) {
-			log.error("send urbanairship request, catch IOException="+e.toString());
+			log.error("send urbanairship request, catch IOException="+e.toString(), e);
 			result = ErrorCode.ERROR_PUSH_IOEXCETION;			
 		} catch (JSONException e) {
-			log.error("send urbanairship request, catch JSONException="+e.toString());
+			log.error("send urbanairship request, catch JSONException="+e.toString(), e);
 			result = ErrorCode.ERROR_PUSH_JSON_EXCEPTION;		
 		} catch (Exception e){
-			log.error("send urbanairship request, catch Exception="+e.toString());
+			log.error("send urbanairship request, catch Exception="+e.toString(), e);
 			result = ErrorCode.ERROR_PUSH_GENERAL_EXCEPTION;
 		} finally {
 			if (connection != null){
