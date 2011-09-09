@@ -9,6 +9,7 @@ import java.util.TimeZone;
 public class DateUtil {
 
 	public static String DATE_FORMAT = "yyyyMMddHHmmss";
+	public static String CHINA_TIMEZONE = "GMT+0800";
 
 	public static String currentDate() {
 		Date date = new Date();
@@ -108,10 +109,12 @@ public class DateUtil {
 
 	}
 	
-	public static boolean isMiddleDate(int startHour, int startMinute, int endHour, int endMinute){
+	public static boolean isMiddleDate(int startHour, int startMinute, int endHour, int endMinute, String timeZoneString){
 	    
-	    Calendar startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
+		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);				
+		
+	    Calendar startCalendar = Calendar.getInstance(timeZone);
+        Calendar endCalendar = Calendar.getInstance(timeZone);
         startCalendar.set(Calendar.HOUR_OF_DAY, startHour);
         startCalendar.set(Calendar.MINUTE, startMinute);
         endCalendar.set(Calendar.HOUR_OF_DAY, endHour);
