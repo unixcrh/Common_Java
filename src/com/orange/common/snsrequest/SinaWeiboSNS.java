@@ -34,7 +34,6 @@ public class SinaWeiboSNS extends SNS {
 			Weibo sinaWeibo = new Weibo();
 
 			sinaWeibo.setToken(tokenKey, tokenSecret);
-			text = URLEncoder.encode(text, "UTF-8");
 			Status status = null;
 			if (file == null || !file.exists()) {
 				status = sinaWeibo.updateStatus(text);
