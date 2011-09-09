@@ -277,13 +277,12 @@ public class MongoDBClient {
     public boolean removeOne(String tableName, DBObject query) {
         if (query == null)
             return false;
-        DBObject doc = findOne(tableName, query);
 
         DBCollection collection = db.getCollection(tableName);
         if (collection == null)
             return false;
 
-        collection.remove(doc);
+        collection.findAndRemove(query);
         return true;
     }
 
