@@ -7,12 +7,15 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Timer;
 
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
 
 public class SolrClient {
 	static final String SOLR_SERVER_URL = "http://localhost:8099/solr";
+	static Logger log = Logger.getLogger(SolrClient.class.getName());
+	
 	CommonsHttpSolrServer server;
 	
 	
@@ -57,7 +60,7 @@ public class SolrClient {
 			String solrURL = "http://".concat(address).concat(":").concat(String.valueOf(port)).concat("/solr");			
 			server = new CommonsHttpSolrServer(solrURL);
 		} catch (MalformedURLException e) {
-			e.printStackTrace(); //TODO
+    		log.error("Start solr client but URL incorrect ", e);
 		}
 		server.setSoTimeout(10000); // socket read timeout
 		server.setConnectionTimeout(1000);
@@ -84,13 +87,10 @@ public class SolrClient {
         @Override
         public void run() {
         	try {
+        		log.info("optimize solr server index");
 				solrClient.server.optimize();
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+        		log.error("optimize solr server index, but catch exception ", e);
 			}
         }
         
