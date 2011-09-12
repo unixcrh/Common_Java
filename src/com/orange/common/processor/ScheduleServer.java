@@ -106,8 +106,8 @@ public class ScheduleServer implements Runnable {
                 
                if(!processor.canProcessRequest()) {
                    //sleep 1 minute
-                   log.info("sleeping, wake up util current time match process time");
-                   Thread.sleep(60000);
+                   log.debug("Sleeping, wake up util current time match process time");
+                   Thread.sleep(60*1000);
                    continue;
                }
                 
@@ -226,7 +226,7 @@ public class ScheduleServer implements Runnable {
     		now.set(Calendar.SECOND, 0);
     		now.set(Calendar.MILLISECOND, 0);    			
     		
-        	log.info("<getTaskDate> next timer set to "+now.getTime().toString());    		
+        	log.info("next reset task timer set to "+now.getTime().toString());    		
     		return now.getTime();
         }
     }
