@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.eclipse.jetty.util.log.Log;
+
 public class DateUtil {
 
 	public static String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -123,6 +125,8 @@ public class DateUtil {
         Date startDate = startCalendar.getTime();
         Date endDate = endCalendar.getTime();
         Date curDate = new Date();
+        
+//        Log.info("startDate="+startDate+",endDate="+endDate+",currentDate="+curDate);
         
         if (curDate.after(startDate) && curDate.before(endDate)) {
             return true;
