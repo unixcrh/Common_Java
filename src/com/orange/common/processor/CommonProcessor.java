@@ -11,6 +11,7 @@ public abstract class CommonProcessor implements Runnable {
 
     public static final Logger log = Logger.getLogger(CommonProcessor.class.getName());
     public static final BlockingQueue<BasicProcessorRequest> queue = new LinkedBlockingQueue<BasicProcessorRequest>();
+	private static final long ALIVE_INTERVAL = 1000 * 20 * 60;	// 20 minutes
 
     public BlockingQueue<BasicProcessorRequest> getQueue() {
     	return queue;
@@ -19,8 +20,15 @@ public abstract class CommonProcessor implements Runnable {
     @Override
     public void run() {
         log.info("Processor start running now...");
+        long startTime = System.currentTimeMillis();
         while (true) {
             try {
+            	long nowTime = System.currentTimeMillis();
+            	if (nowTime - startTime >= ALIVE_INTERVAL){
+            		startTime = nowTime;
+            		log.info("Processing thread alive, great :-)");
+            	}
+            	
                 BasicProcessorRequest request = queue.take();
                 printRequest(request);
                 request.execute(this);

@@ -70,9 +70,13 @@ public class SolrClient {
 		server.setAllowCompression(true);
 		server.setMaxRetries(1); // defaults to 0. > 1 not recommended.	
 		
-		long period = 1000 * 60 * 60 * 24;
-		Timer solrOptimizeTimer = new Timer();
-		solrOptimizeTimer.schedule(new SolrOptimizeTask(this), SolrOptimizeTask.getTaskDate(), period);
+		String optimize = System.getProperty("solr.optimize");
+		if (optimize != null){
+			log.info("Solr optimize index is set");
+			long period = 1000 * 60 * 60 * 24;
+			Timer solrOptimizeTimer = new Timer();
+			solrOptimizeTimer.schedule(new SolrOptimizeTask(this), SolrOptimizeTask.getTaskDate(), period);
+		}
 		
 	}
 	
@@ -87,7 +91,7 @@ public class SolrClient {
         @Override
         public void run() {
         	try {
-        		log.info("optimize solr server index");
+        		log.info("optimize solr server index now");
 				solrClient.server.optimize();
 			} catch (Exception e) {
         		log.error("optimize solr server index, but catch exception ", e);

@@ -4,8 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 
 public class HttpDownload {
 
@@ -15,7 +15,7 @@ public class HttpDownload {
     {
         if (httpURL == null || httpURL.trim().equals(""))
         {
-        	log.warning("<downloadFile> http URL is null");
+        	log.warn("<downloadFile> http URL is null");
             return false;
         }
 
@@ -46,7 +46,8 @@ public class HttpDownload {
         }
         catch (Exception e)
         {
-        	log.severe("<downloadFile> catch exception, http URL="+httpURL+", local path="+localFilePath+", exception="+e.toString());
+        	log.error("<downloadFile> catch exception, http URL="+httpURL+
+        			", local path="+localFilePath+", exception="+e.toString(), e);
             return false;
         }
 
