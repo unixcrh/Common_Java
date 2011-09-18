@@ -46,7 +46,7 @@ public abstract class CommonProcessor implements Runnable {
             return true;
         }
         catch (Exception e) {
-            log.error("<putRequest> catch InterruptedException while running. exception=" + e.toString(), e);
+            log.error("<putRequest> catch Exception while running. exception=" + e.toString(), e);
             return false;
         }
     }
