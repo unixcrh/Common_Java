@@ -51,8 +51,13 @@
 		<jettyVersion>7.3.0.v20110203</jettyVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>				
 	</properties>
-	<dependencies>
-	
+		<dependencies>
+		<dependency>
+			<groupId>com.notnoop.apns</groupId>
+			<artifactId>apns</artifactId>
+			<version>0.1.6</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
