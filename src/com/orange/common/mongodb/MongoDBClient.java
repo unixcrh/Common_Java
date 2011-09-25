@@ -506,14 +506,11 @@ public class MongoDBClient {
 		return collection.find(query);
 	}
 	
-	public Long count(String tableName, String fieldName,
-			String fieldValue) {
+	public Long count(String tableName, DBObject query) {
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
 			return null;
 		
-		DBObject query = new BasicDBObject();
-		query.put(fieldName, fieldValue);
 		return collection.count(query);
 	}
 
