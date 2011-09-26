@@ -15,13 +15,17 @@ public abstract class BasicService {
     String password;
     String deviceToken;
     String payload;
-    ApnsService service;
+    ApnsService apnsService;
     
+    public BasicService(ApnsService apnsService) {
+        super();
+        this.apnsService = apnsService;
+    }
 
     public BasicService(String certificatePath, String password) {
         this.certificatePath = certificatePath;
         this.password = password;
-        service = APNS.newService()
+        apnsService = APNS.newService()
                 .withCert(certificatePath, password)
                 .withSandboxDestination()
                 .build();
@@ -33,7 +37,7 @@ public abstract class BasicService {
         int result = ErrorCode.ERROR_SUCCESS;   
         setPayload();
         try{
-            service.push(deviceToken,payload);
+            apnsService.push(deviceToken,payload);
         }
         catch (NetworkIOException e) {
             log.error("send message to apn, catch NetworkIOException="+e.toString(), e);
