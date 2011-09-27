@@ -22,7 +22,8 @@ public abstract class BasicService {
         this.apnsService = apnsService;
     }
 
-    public BasicService(String certificatePath, String password) {
+    @Deprecated
+	public BasicService(String certificatePath, String password) {
         this.certificatePath = certificatePath;
         this.password = password;
         apnsService = APNS.newService()
@@ -37,11 +38,16 @@ public abstract class BasicService {
         int result = ErrorCode.ERROR_SUCCESS;   
         setPayload();
         try{
-            apnsService.push(deviceToken,payload);
+            apnsService.push(deviceToken, payload);
+            log.info("APNS send push = " + payload);
         }
         catch (NetworkIOException e) {
             log.error("send message to apn, catch NetworkIOException="+e.toString(), e);
             result = ErrorCode.ERROR_PUSH_NETWORK_IOEXCETION;
+        }
+        catch (Exception e) {
+            log.error("send message to apn, catch Exception="+e.toString(), e);
+            result = ErrorCode.ERROR_PUSH_GENERAL_EXCEPTION;
         }
         return result;
     }
