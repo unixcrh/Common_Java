@@ -63,6 +63,8 @@ public abstract class CommonApiServer extends AbstractHandler
 		//PropertyConfigurator.configure(LOG4J_FLE);
 	}
 		
+	
+	
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -72,7 +74,7 @@ public abstract class CommonApiServer extends AbstractHandler
         baseRequest.setHandled(true);        
 		try{			
 			
-	        getServiceHandler().handlRequest(request, response);
+	        getServiceHandler().handlRequest(request, response);	        
                        
 		} catch (Exception e){
 			log.error("<handleHttpServletRequest> catch Exception="+e.toString());		
