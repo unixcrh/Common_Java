@@ -169,13 +169,14 @@ public class ServiceHandler {
 	            response.setContentType(contentType);
 	            response.setStatus(HttpServletResponse.SC_OK);
 	            response.getOutputStream().write(reply);
+	            response.getOutputStream().flush();
 	        }
 			else{
 				response.getWriter().write(responseData);
 				response.getWriter().flush();
 			}
 		} catch (IOException e) {
-			log.error("sendResponse, catch exception=" + e.toString());
+			log.error("sendResponse, catch exception=" + e.toString(), e);			
 		}
 	}
 
