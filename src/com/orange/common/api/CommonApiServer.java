@@ -65,6 +65,7 @@ public abstract class CommonApiServer extends AbstractHandler
 		
 	
 	
+    @Override
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -77,7 +78,7 @@ public abstract class CommonApiServer extends AbstractHandler
 	        getServiceHandler().handlRequest(request, response);	        
                        
 		} catch (Exception e){
-			log.error("<handleHttpServletRequest> catch Exception="+e.toString());		
+			log.error("<handleHttpServletRequest> catch Exception="+e.toString(), e);		
 		} finally {
 		}		
     }
