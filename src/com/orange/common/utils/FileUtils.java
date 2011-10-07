@@ -7,46 +7,55 @@ import java.io.IOException;
 
 public class FileUtils {
 
-	public static String stringFromFile(File file){
-        
-		if (file == null || !file.exists()){ 
+	public static String stringFromFile(File file) {
+
+		if (file == null || !file.exists()) {
 			return null;
-        }
+		}
 
-        try 
-        {
-            BufferedReader in = new BufferedReader( new FileReader(file) );
-            StringBuilder builder = new StringBuilder();
-            String str = null;
-            while ((str = in.readLine()) != null) {
-            	builder.append(str);
-            }
-            in.close();
-            return builder.toString();
-        } 
-        catch (Exception e) {
-        	return null;
-        }		
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			StringBuilder builder = new StringBuilder();
+			String str = null;
+			while ((str = in.readLine()) != null) {
+				builder.append(str);
+			}
+			in.close();
+			return builder.toString();
+		} catch (Exception e) {
+			return null;
+		}
 	}
-	
-	  public static void delFileOrDir(File f) throws IOException {
 
-	        if ((f == null)) {
-	            throw new IllegalArgumentException("Argument " + f + " is not a file or directory. ");
-	        }
-	        if (f.exists() && f.isDirectory()) {
-	            if (f.listFiles().length == 0) {
-	                f.delete();
-	            } else {
-	                File delFiles[] = f.listFiles();
-	                for (File subf : delFiles) {
-	                    if (subf.isDirectory()) {
-	                        delFileOrDir(new File(subf.getAbsolutePath()));// Recursive
-	                    }
-	                    subf.delete();
-	                }
-	                f.delete();
-	            }
-	        }
-	    }
+	public static void createDir(String dir) {
+		if (dir == null || dir.isEmpty())
+			return;
+		
+		File path = new File(dir);
+		if (!path.exists()) {
+			path.mkdirs();
+		}
+	}
+
+	public static void delFileOrDir(File f) throws IOException {
+
+		if ((f == null)) {
+			throw new IllegalArgumentException("Argument " + f
+					+ " is not a file or directory. ");
+		}
+		if (f.exists() && f.isDirectory()) {
+			if (f.listFiles().length == 0) {
+				f.delete();
+			} else {
+				File delFiles[] = f.listFiles();
+				for (File subf : delFiles) {
+					if (subf.isDirectory()) {
+						delFileOrDir(new File(subf.getAbsolutePath()));// Recursive
+					}
+					subf.delete();
+				}
+				f.delete();
+			}
+		}
+	}
 }

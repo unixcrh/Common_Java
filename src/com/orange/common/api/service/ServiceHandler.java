@@ -120,10 +120,10 @@ public class ServiceHandler {
 	
 	private static boolean isGzipEncoding(HttpServletRequest request){ 
         boolean flag=false; 
-        String encoding=request.getHeader("Accept-Encoding"); 
-        if(encoding.indexOf("gzip")!=-1){ 
-          flag=true; 
-        } 
+//        String encoding = request.getHeader("Accept-Encoding");                
+//        if(encoding.indexOf("gzip")!=-1){ 
+//          flag=true; 
+//        } 
         return flag; 
     } 
 
