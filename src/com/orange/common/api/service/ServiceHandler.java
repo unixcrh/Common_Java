@@ -7,11 +7,10 @@ import java.util.zip.GZIPOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
+import me.prettyprint.hector.api.exceptions.HectorException;
 import net.sf.json.JSONException;
 
-import me.prettyprint.hector.api.exceptions.HectorException;
+import org.apache.log4j.Logger;
 
 import com.orange.common.cassandra.CassandraClient;
 import com.orange.common.mongodb.MongoDBClient;
@@ -120,10 +119,14 @@ public class ServiceHandler {
 	
 	private static boolean isGzipEncoding(HttpServletRequest request){ 
         boolean flag=false; 
-//        String encoding = request.getHeader("Accept-Encoding");                
-//        if(encoding.indexOf("gzip")!=-1){ 
-//          flag=true; 
-//        } 
+        String encoding=request.getHeader("Accept-Encoding"); 
+        if (encoding == null || encoding.length() == 0) {
+            return flag;
+        }
+        
+        if (encoding.indexOf("gzip")!=-1) { 
+            flag=true; 
+        } 
         return flag; 
     } 
 
