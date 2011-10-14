@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -49,21 +50,15 @@ public abstract class CommonApiServer extends AbstractHandler
 		   }   		   		   
 	}
 		
-	private static void initSpringContext(String... context){
+	public static void initSpringContext(String... context) {
 		try {
 			new ClassPathXmlApplicationContext(
 					context );
 		} catch (Exception e) {
+			log.info("initSpringContext exception");
 			e.printStackTrace();
 		}
 	}
-	
-	private void initLog4j(){
-		log.info("Initializing log4j with: " + getLog4jFile());
-		//PropertyConfigurator.configure(LOG4J_FLE);
-	}
-		
-	
 	
     @Override
     public void handle(String target,
@@ -83,24 +78,26 @@ public abstract class CommonApiServer extends AbstractHandler
 		}		
     }
 
-    public static void startServer(CommonApiServer serverHandler) throws Exception{
-        
+	public void startServer() throws Exception {
     	//init the spring context
-    	String[] springFiles = new String[]{serverHandler.getSpringContextFile()};
+		String[] springFiles = new String[] { getSpringContextFile() };
     	initSpringContext(springFiles);    	
     	
-    	log.info(serverHandler.getAppNameVersion());
+		log.info(getAppNameVersion());
     	
-    	Server server = new Server(serverHandler.getPort());
-        server.setHandler(serverHandler);
+		Server server = new Server(getPort());
+		server.setHandler(getHandler());
         
         QueuedThreadPool threadPool = new QueuedThreadPool();  
         threadPool.setMaxThreads(100);
         threadPool.setMinThreads(25);
         server.setThreadPool(threadPool);  
-        
         server.setStopAtShutdown(true);
         server.start();
         server.join();
-    }    
+	}
+	
+	public Handler getHandler(){
+		return this;
+	}
 }
