@@ -40,6 +40,17 @@ public class StringUtil {
 		
 	}
 	
+	public static String base64encode(String input) {
+		if (input == null)
+			return null;
+
+		if (input.length() == 0)
+			return null;
+
+		String base64str = Base64.encodeBase64String(input.getBytes());
+		return base64str;
+	}
+	
 	public static String[] getStringList(String... stringList){
 		return stringList;
 	}
