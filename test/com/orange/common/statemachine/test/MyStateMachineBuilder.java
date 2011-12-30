@@ -40,15 +40,15 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 		StateMachine sm = new MyStateMachine();
 		
 		sm.addState(new State(MyStateKey.STATE_GAME_INIT)).
-			addStateTransition(MyEvent.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
+			addTransition(MyEvent.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
 			
 		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).
-			addStateTransition(MyEvent.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
-			addStateTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
+			addTransition(MyEvent.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
+			addTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 		
 		sm.addState(new State(MyStateKey.STATE_GAME_ONGOING)).
-			addStateTransition(MyEvent.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
-			addStateTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
+			addTransition(MyEvent.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
+			addTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 
 		sm.addState(new State(MyStateKey.STATE_GAME_FINISH));
 		

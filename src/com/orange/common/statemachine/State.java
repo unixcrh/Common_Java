@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.util.log.Log;
 
 public class State {
 	
@@ -20,7 +19,7 @@ public class State {
 		this.id = stateId;
 	}	
 	
-	public State addStateTransition(Object eventKey, Object nextStateKey){
+	public State addTransition(Object eventKey, Object nextStateKey){
 		transitionMap.put(eventKey, nextStateKey);
 		return this;
 	}
