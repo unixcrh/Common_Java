@@ -35,7 +35,7 @@ public class StateMachine {
 		if (nextStateKey == null){
 			// TODO next state for event not found			
 			log.warn("<handleEvent> next state for (" + currentState.getKey() + ") event(" 
-					+ event + ") not found!");
+					+ event.getKey() + ") not found!");
 		}
 		else{
 			State nextState = stateMap.get(nextStateKey);	

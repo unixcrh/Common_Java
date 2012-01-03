@@ -12,7 +12,7 @@ public class TestStateMachine {
     public void testBuildStateMachine() {
 		MyStateMachineBuilder builder = new MyStateMachineBuilder();
 		StateMachine sm = builder.buildStateMachine();
-		sm.fireEvent(MyStateMachineBuilder.MyEvent.EVENT_GAME_CREATE);
-		sm.fireEvent(MyStateMachineBuilder.MyEvent.EVENT_GAME_START);
+		sm.fireEvent(new MyStateMachineBuilder.MyEvent(MyStateMachineBuilder.MyEventKey.EVENT_GAME_CREATE));
+		sm.fireEvent(new MyStateMachineBuilder.MyEvent(MyStateMachineBuilder.MyEventKey.EVENT_GAME_START));
     }
 }

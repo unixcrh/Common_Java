@@ -10,13 +10,13 @@ public class State {
 	
 	public static Logger log = Logger.getLogger(StateMachine.class.getName());
 
-	Object id;	// in general, Object shall be an enum key
+	Object stateKey;	// in general, Object shall be an enum key
 	StateMachine stateMachine;
 	
 	Map<Object, Object> transitionMap = new HashMap<Object, Object>();
 	
 	public State(Object stateId){
-		this.id = stateId;
+		this.stateKey = stateId;
 	}	
 	
 	public State addTransition(Object eventKey, Object nextStateKey){
@@ -26,12 +26,12 @@ public class State {
 
 	public void exitAction(Event event) {
 		// this method is to be override
-		log.info("<" + id + "> exit state action" );
+		log.info("<" + event.getKey() + "> exit state action" );
 	}
 	
 	public void enterAction(Event event) {
 		// this method is to be override
-		log.info("<" + id + "> enter state action" );
+		log.info("<" + event.getKey() + "> enter state action" );
 	}
 
 	public Object nextState(Event event) {
@@ -40,7 +40,7 @@ public class State {
 	}
 
 	public Object getKey() {		
-		return this.id;
+		return this.stateKey;
 	}
 
 	public void printTransition() {
@@ -57,5 +57,10 @@ public class State {
 	public StateMachine getStateMachine(){
 		return this.stateMachine;
 	}
+	
+	public String toString(){
+		return stateKey.toString();
+	}
+
 	
 }

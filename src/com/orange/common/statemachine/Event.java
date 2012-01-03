@@ -11,4 +11,8 @@ public class Event {
 	public Object getKey(){
 		return eventKey;
 	}
+	
+	public String toString(){
+		return eventKey.toString();
+	}
 }

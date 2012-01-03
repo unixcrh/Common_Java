@@ -1,5 +1,6 @@
 package com.orange.common.statemachine.test;
 
+import com.orange.common.statemachine.Event;
 import com.orange.common.statemachine.State;
 import com.orange.common.statemachine.StateMachine;
 import com.orange.common.statemachine.StateMachineBuilder;
@@ -20,7 +21,7 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 		}
 	}
 	
-	public enum MyEvent {
+	public enum MyEventKey {
 		EVENT_GAME_CREATE(1),
 		EVENT_GAME_START(2),
 		EVENT_GAME_COMPLETE(3),
@@ -29,9 +30,15 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 		
 		final int value;
 		
-		MyEvent(int value){
+		MyEventKey(int value){
 			this.value = value;
 		}	
+	}
+	
+	public static class MyEvent extends Event {
+		public MyEvent(Object eventKey){
+			super(eventKey);
+		}
 	}
 	
 	
@@ -40,15 +47,15 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 		StateMachine sm = new MyStateMachine();
 		
 		sm.addState(new State(MyStateKey.STATE_GAME_INIT)).
-			addTransition(MyEvent.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
+			addTransition(MyEventKey.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
 			
 		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).
-			addTransition(MyEvent.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
-			addTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
+			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
+			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 		
 		sm.addState(new State(MyStateKey.STATE_GAME_ONGOING)).
-			addTransition(MyEvent.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
-			addTransition(MyEvent.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
+			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
+			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 
 		sm.addState(new State(MyStateKey.STATE_GAME_FINISH));
 		
