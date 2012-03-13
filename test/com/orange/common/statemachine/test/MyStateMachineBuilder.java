@@ -53,7 +53,7 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
 			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 		
-		sm.addState(new State(MyStateKey.STATE_GAME_ONGOING)).
+		sm.addState(new MyState(MyStateKey.STATE_GAME_ONGOING)).
 			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
 			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 

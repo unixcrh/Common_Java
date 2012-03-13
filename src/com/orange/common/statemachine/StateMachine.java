@@ -13,14 +13,32 @@ public class StateMachine {
 	Map<Object, State> stateMap = new HashMap<Object, State>();
 	State startState;
 	State finalState;
-	State currentState;		
+//	State currentState;		
+	
+	
 	
 	public State addState(State state){		
 		stateMap.put(state.getKey(), state);
-		state.setStateMachine(this);
+//		state.setStateMachine(this);
 		return state; 
 	}
 	
+	public State getStartState() {
+		return startState;
+	}
+
+	public void setStartState(State startState) {
+		this.startState = startState;
+	}
+
+	public State getFinalState() {
+		return finalState;
+	}
+
+	public void setFinalState(State finalState) {
+		this.finalState = finalState;
+	}
+
 	public void fireEvent(Event event){
 		handleEvent(event);
 	}
@@ -29,13 +47,23 @@ public class StateMachine {
 		handleEvent(new Event(eventKey));
 	}
 
-	public void handleEvent(Event event){
-		currentState.exitAction(event);
+	public State nextState(State currentState, Event event, Object context){
+		return handleEvent(currentState, event, context);
+	}
+	
+	public State nextState(State currentState, Object eventKey, Object context){
+		return handleEvent(currentState, new Event(eventKey), context);
+	}
+	
+	public State handleEvent(State currentState, Event event, Object context){
+		currentState.exitAction(event, context);
 		Object nextStateKey = currentState.nextState(event);
 		if (nextStateKey == null){
 			// TODO next state for event not found			
 			log.warn("<handleEvent> next state for (" + currentState.getKey() + ") event(" 
 					+ event.getKey() + ") not found!");
+			
+			return null;
 		}
 		else{
 			State nextState = stateMap.get(nextStateKey);	
@@ -47,15 +75,21 @@ public class StateMachine {
 				log.info("<handleEvent> " + currentState.getKey() + " -- " 
 						+ event + " --> " + nextState.getKey());
 				currentState = nextState;
-				currentState.enterAction(event);
+				currentState.enterAction(event, context);
 			}
+			
+			return nextState;
 		}
+	}
+	
+	private void handleEvent(Event event){
+//		currentState = handleEvent(currentState, event);
 	}
 	
 	public boolean setStartAndFinalState(Object startStateKey, Object finalStateKey){
 		this.startState = stateMap.get(startStateKey);
 		this.finalState = stateMap.get(finalStateKey);
-		this.currentState = startState;
+//		this.currentState = startState;
 		if (startState == null || finalState == null){
 			log.error("Set start/final state for state machine, but state not found by key " 
 					+ startStateKey + ", " + finalStateKey);

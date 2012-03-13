@@ -11,10 +11,22 @@ public class State {
 	public static Logger log = Logger.getLogger(StateMachine.class.getName());
 
 	Object stateKey;	// in general, Object shall be an enum key
-	StateMachine stateMachine;
+//	StateMachine stateMachine;
+	
+	Object context;		// state running context
 	
 	Map<Object, Object> transitionMap = new HashMap<Object, Object>();
 	
+	
+	
+	public Object getContext() {
+		return context;
+	}
+
+	public void setContext(Object context) {
+		this.context = context;
+	}
+
 	public State(Object stateId){
 		this.stateKey = stateId;
 	}	
@@ -24,12 +36,12 @@ public class State {
 		return this;
 	}
 
-	public void exitAction(Event event) {
+	public void exitAction(Event event, Object context) {
 		// this method is to be override
 		log.info("<" + event.getKey() + "> exit state action" );
 	}
 	
-	public void enterAction(Event event) {
+	public void enterAction(Event event, Object context) {
 		// this method is to be override
 		log.info("<" + event.getKey() + "> enter state action" );
 	}
@@ -50,13 +62,13 @@ public class State {
 		}
 	}
 
-	public void setStateMachine(StateMachine stateMachine) {
-		this.stateMachine = stateMachine;		
-	}
-	
-	public StateMachine getStateMachine(){
-		return this.stateMachine;
-	}
+//	public void setStateMachine(StateMachine stateMachine) {
+//		this.stateMachine = stateMachine;		
+//	}
+//	
+//	public StateMachine getStateMachine(){
+//		return this.stateMachine;
+//	}
 	
 	public String toString(){
 		return stateKey.toString();

@@ -10,8 +10,7 @@ public class MyState extends State {
 	}
 
 	@Override
-	public void enterAction(Event event) {
-		MyStateMachine sm = (MyStateMachine)this.getStateMachine();
-		log.info("Do somthing...");
+	public void enterAction(Event event, Object context) {
+		log.info("Do somthing..., context = " + context.toString());
 	}
 }
