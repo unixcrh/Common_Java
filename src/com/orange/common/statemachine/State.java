@@ -13,12 +13,12 @@ public class State {
 	Object stateKey;	// in general, Object shall be an enum key
 //	StateMachine stateMachine;
 	
-	Object context;		// state running context
+//	Object context;		// state running context
 	
 	Map<Object, Object> transitionMap = new HashMap<Object, Object>();
 	
 	
-	
+	/*
 	public Object getContext() {
 		return context;
 	}
@@ -26,6 +26,7 @@ public class State {
 	public void setContext(Object context) {
 		this.context = context;
 	}
+	*/
 
 	public State(Object stateId){
 		this.stateKey = stateId;

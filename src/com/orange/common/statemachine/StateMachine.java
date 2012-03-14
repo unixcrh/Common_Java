@@ -56,7 +56,11 @@ public class StateMachine {
 	}
 	
 	public State handleEvent(State currentState, Event event, Object context){
-		currentState.exitAction(event, context);
+		if (currentState == null){
+			log.warn("<handleEvent> but current state is null?");
+			return null;
+		}
+		
 		Object nextStateKey = currentState.nextState(event);
 		if (nextStateKey == null){
 			// TODO next state for event not found			
@@ -74,6 +78,8 @@ public class StateMachine {
 			else{
 				log.info("<handleEvent> " + currentState.getKey() + " -- " 
 						+ event + " --> " + nextState.getKey());
+
+				currentState.exitAction(event, context);
 				currentState = nextState;
 				currentState.enterAction(event, context);
 			}
