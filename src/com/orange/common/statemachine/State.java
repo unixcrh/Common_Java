@@ -36,15 +36,21 @@ public class State {
 		transitionMap.put(eventKey, nextStateKey);
 		return this;
 	}
+	
+	public int validateEvent(Event event, Object context){
+		// this method is to be override
+		log.info("<" + event.getKey() + "> validate event, wow, you didn't override it yet?" );
+		return 0;
+	}
 
 	public void exitAction(Event event, Object context) {
 		// this method is to be override
-		log.info("<" + event.getKey() + "> exit state action" );
+		log.debug("<" + event.getKey() + "> exit state action" );
 	}
 	
 	public void enterAction(Event event, Object context) {
 		// this method is to be override
-		log.info("<" + event.getKey() + "> enter state action" );
+		log.info("<" + event.getKey() + "> enter state action, wow, you didn't override it yet?" );
 	}
 
 	public Object nextState(Event event) {

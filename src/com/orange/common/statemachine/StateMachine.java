@@ -60,7 +60,7 @@ public class StateMachine {
 			log.warn("<handleEvent> but current state is null?");
 			return null;
 		}
-		
+				
 		Object nextStateKey = currentState.nextState(event);
 		if (nextStateKey == null){
 			// TODO next state for event not found			
