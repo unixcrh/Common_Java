@@ -158,7 +158,7 @@ public class MongoDBClient {
     }
 	
 	//returnNew = true
-    public DBObject findAndModifyNew(String tableName, DBObject query, DBObject update) {
+    public DBObject findAndModify(String tableName, DBObject query, DBObject update) {
         DBCollection collection = db.getCollection(tableName);
         if (collection == null)
             return null;
@@ -187,7 +187,7 @@ public class MongoDBClient {
     }
 
 	//returnNew = false
-	public DBObject findAndModify(String tableName,
+	public DBObject findAndModifySet(String tableName,
 			Map<String, Object> equalCondition, Map<String, Object> updateMap) {
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
