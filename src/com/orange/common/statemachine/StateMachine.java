@@ -60,11 +60,13 @@ public class StateMachine {
 			log.warn("<handleEvent> but current state is null?");
 			return null;
 		}
+		
+		String id = context.toString();
 				
 		Object nextStateKey = currentState.nextState(event);
 		if (nextStateKey == null){
 			// TODO next state for event not found			
-			log.warn("<handleEvent> next state for (" + currentState.getKey() + ") event(" 
+			log.warn(id + " <handleEvent> next state for (" + currentState.getKey() + ") event(" 
 					+ event.getKey() + ") not found!");
 			
 			return null;
@@ -73,10 +75,10 @@ public class StateMachine {
 			State nextState = stateMap.get(nextStateKey);	
 			if (nextState == null){
 				// TODO state not found by key
-				log.warn("<handleEvent> state " + nextStateKey + " not found!");
+				log.warn(id + " <handleEvent> state " + nextStateKey + " not found!");
 			}
 			else{
-				log.info("<handleEvent> " + currentState.getKey() + " -- " 
+				log.info(id + " <handleEvent> " + currentState.getKey() + " -- " 
 						+ event + " --> " + nextState.getKey());
 
 				currentState.exitAction(event, context);
