@@ -23,6 +23,7 @@ public class CommonMailSender {
 	String host = "smtp.163.com";
 	String from = "gckj123@163.com";
 	String to = "";
+	String[] recivers;
 	String username = from;
 	String password = "gckj123456";
 	String title;
@@ -56,7 +57,9 @@ public class CommonMailSender {
 
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			for (String address : recivers) {
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
+			}		
 			message.setSubject(title);
 			message.setSentDate(new Date());
 			
@@ -91,7 +94,13 @@ public CommonMailSender(String to, String title, Object content,String imageUrl)
 	this.content = content;
 	this.imageUrl = imageUrl;
 }
-
+public CommonMailSender(String[] recivers, String title, Object content,String imageUrl) {
+	super();
+	this.recivers = recivers;
+	this.title = title;
+	this.content = content;
+	this.imageUrl = imageUrl;
+}
 
 }
 
