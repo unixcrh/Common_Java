@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.cassandra.db.DBConstants;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
@@ -475,6 +476,10 @@ public class MongoDBClient {
 		DBObject query = new BasicDBObject();
 		query.put(fieldName, value);
 		return collection.findOne(query);
+	}
+	
+	public DBObject findOneByObjectId(String tableName,String value) {
+		return this.findOne(tableName, "_id", new ObjectId(value));
 	}
 
     public DBObject findAndModifyInsert(String tableName, BasicDBObject query, BasicDBObject update) {
