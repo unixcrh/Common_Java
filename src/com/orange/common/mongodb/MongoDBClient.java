@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.cassandra.db.DBConstants;
+
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
@@ -287,6 +287,13 @@ public class MongoDBClient {
         return true;
     }
 
+    public boolean removeByObjectId(String tableName, String objectId) {
+    	BasicDBObject object = new BasicDBObject();
+    	object.put("_id", new ObjectId(objectId));
+    	return removeOne(tableName, object);
+    }
+    
+    
 	
 	public DBObject findOne(String tableName, Map<String, String> fieldValues) {
 		if (fieldValues == null)
