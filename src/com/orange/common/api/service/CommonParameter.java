@@ -7,8 +7,7 @@ public class CommonParameter {
 	
 	
 	public static final String METHOD = "m";
-
-	
+	public static final String FORMAT = "format";	
 	
 	public static final String PARA_TIMESTAMP = "ts";
 	public static final String PARA_MAC = "mac";
@@ -20,4 +19,6 @@ public class CommonParameter {
 	public static final int  VERIFY_SUCCESS = 1;
 	public static final String RESPONSE_VERIFY_SUCCESS = "<html><h1 align='center'>注册成功</h1></html>";
 
+	public static final String JSON = "json";
+	public static final String PROTOCOL_BUFFER = "pb";
 }

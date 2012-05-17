@@ -48,6 +48,11 @@ public class ServiceHandler {
 		printRequest(request);
 
 		String method = request.getParameter(CommonParameter.METHOD);
+		String format = request.getParameter(CommonParameter.FORMAT);
+		if (format == null){
+			format = CommonParameter.JSON;
+		}
+		
 		CommonService obj = null;
 		obj = serviceFactory.createServiceObjectByMethod(method);
 
@@ -55,23 +60,24 @@ public class ServiceHandler {
 
 			if (obj == null) {
 				sendResponseByErrorCode(response,
-						CommonErrorCode.ERROR_PARA_METHOD_NOT_FOUND, gzip);
+						CommonErrorCode.ERROR_PARA_METHOD_NOT_FOUND, gzip, format);
 				return;
 			}
 
 			obj.setCassandraClient(cassandraClient);
 			obj.setMongoClient(mongoClient);
 			obj.setRequest(request);
+			obj.setDataFormat(format);
 			
 			if (!obj.validateSecurity(request)) {
 				sendResponseByErrorCode(response,
-						CommonErrorCode.ERROR_INVALID_SECURITY, gzip);
+						CommonErrorCode.ERROR_INVALID_SECURITY, gzip, format);
 				return;
 			}
 
 			// parse request parameters
 			if (!obj.setDataFromRequest(request)) {
-				sendResponseByErrorCode(response, obj.resultCode, gzip);
+				sendResponseByErrorCode(response, obj.resultCode, gzip, format);
 				return;
 			}
 
@@ -92,11 +98,20 @@ public class ServiceHandler {
 		} finally {
 		}
 
-		String responseData = obj.getResponseString();
-		String responseType = obj.resultType;
+		if (format.equals(CommonParameter.PROTOCOL_BUFFER)){
+			byte[] responseData = obj.getResponseByteData();
+			String responseType = obj.resultType;
 
-		// send back response
-		sendResponse(response, responseData, responseType, gzip);
+			// send back response
+			sendResponse(response, responseData, responseType, gzip);			
+		}
+		else {
+			String responseData = obj.getResponseString();
+			String responseType = obj.resultType;
+
+			// send back response
+			sendResponse(response, responseData, responseType, gzip);			
+		}
 
 	}
 
@@ -137,6 +152,52 @@ public class ServiceHandler {
     private static final String CONTENT_TYPE_TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8";
     private static final String GENERIC_FAILURE_MSG = "The call failed on the server; see server log for details";
 	
+    void sendResponse(HttpServletResponse response, byte[] responseData, String responseType, boolean gzip) {
+//		printResponse(response, responseData);
+		response.setContentType(responseType);
+		try {
+
+			if (gzip){
+				byte[] reply = responseData;
+		        String contentType = CONTENT_TYPE_TEXT_PLAIN_UTF8;
+				
+				ByteArrayOutputStream output = null;
+	            GZIPOutputStream gzipOutputStream = null;
+	            try {
+	                output = new ByteArrayOutputStream(reply.length);
+	                gzipOutputStream = new GZIPOutputStream(output);
+	                gzipOutputStream.write(reply);
+	                gzipOutputStream.finish();
+	                gzipOutputStream.flush();
+	                response.setHeader(CONTENT_ENCODING, CONTENT_ENCODING_GZIP);
+	                reply = output.toByteArray();
+	            } catch (IOException e) {
+	                log.error("send gzip reponse but catch exception = " + e.toString(), e);
+	                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            } finally {
+	                if (null != gzipOutputStream) {
+	                    gzipOutputStream.close();
+	                }
+	                if (null != output) {
+	                    output.close();
+	                }
+	            }
+	            
+	            response.setContentLength(reply.length);
+	            response.setContentType(contentType);
+	            response.setStatus(HttpServletResponse.SC_OK);
+	            response.getOutputStream().write(reply);
+	            response.getOutputStream().flush();
+	        }
+			else{
+				response.getOutputStream().write(responseData);
+				response.getOutputStream().flush();
+			}
+		} catch (IOException e) {
+			log.error("sendResponse, catch exception=" + e.toString(), e);			
+		}
+	}
+    
 	void sendResponse(HttpServletResponse response, String responseData, String responseType, boolean gzip) {
 		printResponse(response, responseData);
 		response.setContentType(responseType);
@@ -183,8 +244,22 @@ public class ServiceHandler {
 		}
 	}
 
-	void sendResponseByErrorCode(HttpServletResponse response, int errorCode, boolean gzip) {
-		String resultString = CommonErrorCode.getJSONByErrorCode(errorCode);
-		sendResponse(response, resultString,CommonParameter.APPLICATION_JSON, gzip);
+	void sendResponseByErrorCode(HttpServletResponse response, int errorCode, boolean gzip, String responseFormat) {
+		if (responseFormat.equals(CommonParameter.PROTOCOL_BUFFER)){
+			sendResponse(response, errorCode);
+		}
+		else{
+			String resultString = CommonErrorCode.getJSONByErrorCode(errorCode);
+			sendResponse(response, resultString,CommonParameter.APPLICATION_JSON, gzip);
+		}
+	}
+
+	private void sendResponse(HttpServletResponse response, int errorCode) {
+        try {
+            response.setStatus(errorCode);
+			response.getOutputStream().flush();
+		} catch (Exception e) {
+			log.error("sendResponse, catch exception=" + e.toString(), e);			
+		}
 	}
 }

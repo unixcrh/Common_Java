@@ -18,12 +18,14 @@ public abstract class CommonService {
 	// response data
 	protected int resultCode = 0;
 	protected Object resultData = null;
+	protected byte[] byteData = null;
 	protected String resultType = CommonParameter.APPLICATION_JSON;
+	protected String format = CommonParameter.JSON;
 	
 	protected CassandraClient cassandraClient = null;
 	protected MongoDBClient mongoClient = null;
 	
-	HttpServletRequest request = null;
+	HttpServletRequest request = null;		
 
 	public MongoDBClient getMongoClient() {
 		return mongoClient;
@@ -146,5 +148,13 @@ public abstract class CommonService {
 					+ ",client mac=" + mac + ",server mac=" + encodeStr);
 			return false;
 		}
+	}
+
+	public void setDataFormat(String format) {
+		this.format = format;
+	}
+
+	public byte[] getResponseByteData() {
+		return byteData;
 	}
 }
