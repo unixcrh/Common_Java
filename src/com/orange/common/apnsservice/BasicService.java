@@ -6,6 +6,7 @@ import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 import com.notnoop.exceptions.NetworkIOException;
 import com.orange.common.urbanairship.ErrorCode;
+import com.orange.common.utils.StringUtil;
 
 public abstract class BasicService {
     
@@ -16,6 +17,18 @@ public abstract class BasicService {
     String deviceToken;
     String payload;
     ApnsService apnsService;
+    public static boolean IS_TEST = initIsTest(); 
+        
+    private static boolean initIsTest(){
+    	
+    	String isTestString = System.getProperty("push.test");
+    	boolean isTest = false;
+    	if (!StringUtil.isEmpty(isTestString)){
+    		isTest = (Integer.parseInt(isTestString) != 0);
+    	}
+    	
+    	return isTest;
+    }
     
     public BasicService(ApnsService apnsService) {
         super();
@@ -24,12 +37,20 @@ public abstract class BasicService {
 
     @Deprecated
 	public BasicService(String certificatePath, String password) {
+    	
         this.certificatePath = certificatePath;
         this.password = password;
-        apnsService = APNS.newService()
-                .withCert(certificatePath, password)
-                .withSandboxDestination()
-                .build();
+        if (IS_TEST){
+	        apnsService = APNS.newService()
+	                .withCert(certificatePath, password)
+	                .withSandboxDestination()
+	                .build();
+        }
+        else{
+	        apnsService = APNS.newService()
+	        		.withCert(certificatePath, password)
+	        		.build();        	
+        }
     }
     
     abstract boolean setPayload();
