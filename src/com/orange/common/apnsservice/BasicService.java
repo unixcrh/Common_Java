@@ -49,6 +49,7 @@ public abstract class BasicService {
         else{
 	        apnsService = APNS.newService()
 	        		.withCert(certificatePath, password)
+	        		.withProductionDestination()
 	        		.build();        	
         }
     }
