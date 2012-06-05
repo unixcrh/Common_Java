@@ -1,9 +1,14 @@
 package com.orange.common.api.service;
 
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -13,8 +18,52 @@ import net.sf.json.JSONObject;
 import com.orange.common.cassandra.CassandraClient;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.common.utils.StringUtil;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
 
 public abstract class CommonService {
+	
+	/** 
+     * Read the next line of input. 
+     * 
+     * @return a byte array containing all post data 
+     * @exception IOException 
+     *                if an input or output exception has occurred. 
+     */  
+    protected byte[] readPostData(ServletInputStream in) throws IOException{  
+    	
+    	log.info("<readPostData>");
+    	
+    	int MAX_BUFFER_SIZE = 8*1024;
+        byte[] buf = new byte[MAX_BUFFER_SIZE];  
+        List<ByteBuffer> byteList = new ArrayList<ByteBuffer>();
+
+        int totalLen = 0;
+        int result;    
+        do {  
+            result = in.read(buf, 0, MAX_BUFFER_SIZE); // does +=  
+            if (result > 0) {
+            	totalLen += result;
+            	byteList.add(ByteBuffer.allocate(result));
+            }  
+        }  
+        while(result != -1); // loop only if the buffer was filled  
+        in.close();
+
+        if (totalLen <= 0){
+        	return null;
+        }
+        
+        ByteBuffer retByteBuffer = ByteBuffer.allocate(totalLen);
+        for (ByteBuffer byteBuffer : byteList){
+        	retByteBuffer.put(byteBuffer);
+        }
+               
+        byte[] data = retByteBuffer.array();
+		log.info("<readPostData> total "+data.length + " bytes read");
+        
+        return data;  
+    }  
+	
 	// response data
 	protected int resultCode = 0;
 	protected Object resultData = null;
