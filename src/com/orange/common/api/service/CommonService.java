@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.cassandra.cli.CliParser.value_return;
 import org.apache.log4j.Logger;
 
 import net.sf.json.JSONObject;
@@ -43,7 +44,8 @@ public abstract class CommonService {
             result = in.read(buf, 0, MAX_BUFFER_SIZE); // does +=  
             if (result > 0) {
             	totalLen += result;
-            	byteList.add(ByteBuffer.allocate(result));
+            	ByteBuffer bytes = ByteBuffer.wrap(buf, 0, result);
+            	byteList.add(bytes);
             }  
         }  
         while(result != -1); // loop only if the buffer was filled  
@@ -70,6 +72,7 @@ public abstract class CommonService {
 	protected byte[] byteData = null;
 	protected String resultType = CommonParameter.APPLICATION_JSON;
 	protected String format = CommonParameter.JSON;
+	
 	
 	protected CassandraClient cassandraClient = null;
 	protected MongoDBClient mongoClient = null;
@@ -206,4 +209,13 @@ public abstract class CommonService {
 	public byte[] getResponseByteData() {
 		return byteData;
 	}
+	
+	protected int getIntValueFromRequeset(HttpServletRequest request, String key, int defaultValue) {
+		String value = request.getParameter(key);
+		if (value != null && value.length() != 0) {
+			return Integer.valueOf(value);
+		}
+		return defaultValue;
+	}
+	
 }
