@@ -1,6 +1,7 @@
 package com.orange.common.statemachine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,13 +17,12 @@ public class StateMachine {
 //	State currentState;		
 	
 	
-	
 	public State addState(State state){		
 		stateMap.put(state.getKey(), state);
 //		state.setStateMachine(this);
 		return state; 
 	}
-	
+		
 	public State getStartState() {
 		return startState;
 	}
@@ -60,7 +60,7 @@ public class StateMachine {
 			log.warn("<handleEvent> but current state is null?");
 			return null;
 		}
-		
+				
 		String id = context.toString();
 				
 		Object nextStateKey = currentState.nextState(event);
@@ -71,25 +71,62 @@ public class StateMachine {
 			
 			return null;
 		}
-		else{
-			State nextState = stateMap.get(nextStateKey);	
-			if (nextState == null){
-				// TODO state not found by key
-				log.warn(id + " <handleEvent> state " + nextStateKey + " not found!");
+		
+		boolean drivenByEvent = true;
+		while (true){			
+				State nextState = stateMap.get(nextStateKey);	
+				if (nextState == null){
+					// TODO state not found by key
+					log.warn(id + " <handleEvent> state " + nextStateKey + " not found!");
+				}
+				else{
+					if (drivenByEvent){
+						log.info(id + " <handleEvent> " + currentState.getKey() + " -- " 
+								+ event + " --> " + nextState.getKey());
+					}
+					else{
+						log.info(id + " <handleEvent> " + currentState.getKey() + " -- Decision --> " + nextState.getKey());						
+					}
+	
+					// execute post actions
+					currentState.exitAction(event, context);
+					executeActions(currentState.postActionList, context);
+					
+					currentState = nextState;
+	
+					// execute pre actions
+					executeActions(currentState.preActionList, context);
+					currentState.enterAction(event, context);
+					
+					// check decision points
+					if (currentState.decisionPoint != null){
+						nextStateKey = currentState.decisionPoint.decideNextState(context);
+						if (nextStateKey == null){
+							return nextState;
+						}
+						else{
+							log.info(id + "<handleEvent> goto next state "+ nextStateKey + " by decision");
+							drivenByEvent = false;
+						}
+					}
+					else{
+						return nextState;
+					}
+				
+//				return nextState;
 			}
-			else{
-				log.info(id + " <handleEvent> " + currentState.getKey() + " -- " 
-						+ event + " --> " + nextState.getKey());
-
-				currentState.exitAction(event, context);
-				currentState = nextState;
-				currentState.enterAction(event, context);
-			}
-			
-			return nextState;
 		}
 	}
 	
+	private void executeActions(List<Action> actionList, Object context) {
+		if (actionList == null)
+			return;
+		
+		for (Action a : actionList){
+			a.execute(context);
+		}
+	}
+
 	private void handleEvent(Event event){
 //		currentState = handleEvent(currentState, event);
 	}
