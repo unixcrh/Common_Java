@@ -1,10 +1,14 @@
 package com.orange.common.statemachine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
+import com.orange.common.statemachine.test.TestActions.TestAction1;
 
 public class State {
 	
@@ -16,7 +20,10 @@ public class State {
 //	Object context;		// state running context
 	
 	Map<Object, Object> transitionMap = new HashMap<Object, Object>();
+	List<Action> preActionList = new ArrayList<Action>();
+	List<Action> postActionList = new ArrayList<Action>();	
 	
+	DecisionPoint decisionPoint = null;
 	
 	/*
 	public Object getContext() {
@@ -79,6 +86,23 @@ public class State {
 	
 	public String toString(){
 		return stateKey.toString();
+	}
+
+	public State addAction(Action action) {
+		if (transitionMap.size() == 0){
+			// pre actions
+			preActionList.add(action);
+		}
+		else{
+			// post actions
+			postActionList.add(action);			
+		}
+		return this;
+	}
+
+	public State setDecisionPoint(DecisionPoint decisionPoint) {		
+		this.decisionPoint = decisionPoint;
+		return this;
 	}
 
 	

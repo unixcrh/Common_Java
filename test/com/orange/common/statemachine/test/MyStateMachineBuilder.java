@@ -1,12 +1,15 @@
 package com.orange.common.statemachine.test;
 
+import com.orange.common.statemachine.Action;
+import com.orange.common.statemachine.Condition;
+import com.orange.common.statemachine.DecisionPoint;
 import com.orange.common.statemachine.Event;
 import com.orange.common.statemachine.State;
 import com.orange.common.statemachine.StateMachine;
 import com.orange.common.statemachine.StateMachineBuilder;
 
-public class MyStateMachineBuilder extends StateMachineBuilder {
-
+public class MyStateMachineBuilder extends StateMachineBuilder {	
+	
 	public enum MyStateKey {
 		STATE_GAME_INIT (1),
 		STATE_GAME_WAIT (2),
@@ -46,12 +49,31 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 	public StateMachine buildStateMachine() {
 		StateMachine sm = new MyStateMachine();
 		
+		Action action1 = new TestActions.TestAction1();
+		Action action2 = new TestActions.TestAction2();
+		Action action3 = new TestActions.TestAction3();
+		Condition cond1 = new TestDecisions.Condition1();
+		
 		sm.addState(new State(MyStateKey.STATE_GAME_INIT)).
-			addTransition(MyEventKey.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT);
+//			addAction(action3).
+			addTransition(MyEventKey.EVENT_GAME_CREATE, MyStateKey.STATE_GAME_WAIT).
+			addAction(action3);
 			
 		sm.addState(new MyState(MyStateKey.STATE_GAME_WAIT)).
+			addAction(action1).
+			setDecisionPoint(new DecisionPoint(cond1){
+				public Object decideNextState(Object context){
+					if (condition.decide(context) == 1){
+						return MyStateKey.STATE_GAME_ONGOING;
+					}
+					else{
+						return MyStateKey.STATE_GAME_FINISH;
+					}
+				}
+			}).
 			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
-			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
+			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH).
+			addAction(action2);		
 		
 		sm.addState(new MyState(MyStateKey.STATE_GAME_ONGOING)).
 			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).

@@ -19,7 +19,6 @@ import net.sf.json.JSONObject;
 import com.orange.common.cassandra.CassandraClient;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.common.utils.StringUtil;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
 
 public abstract class CommonService {
 	
