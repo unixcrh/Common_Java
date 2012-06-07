@@ -8,8 +8,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.orange.common.statemachine.test.TestActions.TestAction1;
-
 public class State {
 	
 	public static Logger log = Logger.getLogger(StateMachine.class.getName());
