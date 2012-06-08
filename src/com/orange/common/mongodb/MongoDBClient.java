@@ -253,6 +253,19 @@ public class MongoDBClient {
 		
 		return collection.findOne(query);
 	}
+
+	public DBObject findOne(String tableName, DBObject query, DBObject field) {
+		if (query == null)
+			return null;
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		
+		return collection.findOne(query,field);
+	}
+
+	
 	
 	public void pullArrayKey(String tableName, DBObject query, String ArrayName, String key, String keyValue) {
 	    if (query == null) {
