@@ -19,7 +19,8 @@ public class State {
 	
 	Map<Object, Object> transitionMap = new HashMap<Object, Object>();
 	List<Action> preActionList = new ArrayList<Action>();
-	List<Action> postActionList = new ArrayList<Action>();	
+	List<Action> postActionList = new ArrayList<Action>();
+	List<Object> emptyTransitionList = new ArrayList<Object>();
 	
 	DecisionPoint decisionPoint = null;
 	
@@ -39,6 +40,11 @@ public class State {
 	
 	public State addTransition(Object eventKey, Object nextStateKey){
 		transitionMap.put(eventKey, nextStateKey);
+		return this;
+	}
+	
+	public State addEmptyTransition(Object eventKey){
+		emptyTransitionList.add(eventKey);
 		return this;
 	}
 	
@@ -101,6 +107,10 @@ public class State {
 	public State setDecisionPoint(DecisionPoint decisionPoint) {		
 		this.decisionPoint = decisionPoint;
 		return this;
+	}
+
+	public boolean isEventInEmptyTransition(Object eventKey) {
+		return emptyTransitionList.contains(eventKey);
 	}
 
 	

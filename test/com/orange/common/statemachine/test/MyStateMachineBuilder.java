@@ -29,7 +29,8 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 		EVENT_GAME_START(2),
 		EVENT_GAME_COMPLETE(3),
 		EVENT_GAME_TERMINATE(4),
-		EVENT_GAME_PAUSE(5);
+		EVENT_GAME_PAUSE(5),
+		EVENT_GAME_UNKNOWN(6);
 		
 		final int value;
 		
@@ -73,10 +74,12 @@ public class MyStateMachineBuilder extends StateMachineBuilder {
 			}).
 			addTransition(MyEventKey.EVENT_GAME_START, MyStateKey.STATE_GAME_ONGOING).
 			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH).
+			addEmptyTransition(MyEventKey.EVENT_GAME_UNKNOWN).
 			addAction(action2);		
 		
 		sm.addState(new MyState(MyStateKey.STATE_GAME_ONGOING)).
 			addTransition(MyEventKey.EVENT_GAME_COMPLETE, MyStateKey.STATE_GAME_FINISH).
+			addEmptyTransition(MyEventKey.EVENT_GAME_UNKNOWN).
 			addTransition(MyEventKey.EVENT_GAME_TERMINATE, MyStateKey.STATE_GAME_FINISH);
 
 		sm.addState(new State(MyStateKey.STATE_GAME_FINISH));

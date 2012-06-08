@@ -25,6 +25,12 @@ public class TestStateMachine {
 		context = "test context 2";
 
 		currentState = sm.nextState(currentState, 
+				new MyStateMachineBuilder.MyEvent(MyStateMachineBuilder.MyEventKey.EVENT_GAME_UNKNOWN),
+				context);
+		
+		context = "test context 3";
+
+		currentState = sm.nextState(currentState, 
 				new MyStateMachineBuilder.MyEvent(MyStateMachineBuilder.MyEventKey.EVENT_GAME_COMPLETE),
 				context);
     }

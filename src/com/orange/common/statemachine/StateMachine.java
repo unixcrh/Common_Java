@@ -63,6 +63,12 @@ public class StateMachine {
 				
 		String id = context.toString();
 				
+		if (currentState.isEventInEmptyTransition(event.getKey())){
+			log.info(id + " <handleEvent> " + currentState.getKey() + " -- " 
+					+ event.getKey() + " --> [STAY CURRENT]");
+			return currentState;
+		}
+		
 		Object nextStateKey = currentState.nextState(event);
 		if (nextStateKey == null){
 			// TODO next state for event not found			
