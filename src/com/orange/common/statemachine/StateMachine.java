@@ -84,6 +84,7 @@ public class StateMachine {
 				if (nextState == null){
 					// TODO state not found by key
 					log.warn(id + " <handleEvent> state " + nextStateKey + " not found!");
+					return null;
 				}
 				else{
 					if (drivenByEvent){
@@ -96,12 +97,12 @@ public class StateMachine {
 	
 					// execute post actions
 					currentState.exitAction(event, context);
-					executeActions(currentState.postActionList, context);
+					executeActions(currentState.postActionList, context, id);
 					
 					currentState = nextState;
 	
 					// execute pre actions
-					executeActions(currentState.preActionList, context);
+					executeActions(currentState.preActionList, context, id);
 					currentState.enterAction(event, context);
 					
 					// check decision points
@@ -111,7 +112,7 @@ public class StateMachine {
 							return nextState;
 						}
 						else{
-							log.info(id + "<handleEvent> goto next state "+ nextStateKey + " by decision");
+//							log.info(id + "<handleEvent> goto next state "+ nextStateKey + " by decision");
 							drivenByEvent = false;
 						}
 					}
@@ -124,11 +125,12 @@ public class StateMachine {
 		}
 	}
 	
-	private void executeActions(List<Action> actionList, Object context) {
+	private void executeActions(List<Action> actionList, Object context, String id) {
 		if (actionList == null)
 			return;
 		
 		for (Action a : actionList){
+			log.info(id + " execute action " + a.getClass().getSimpleName());
 			a.execute(context);
 		}
 	}
