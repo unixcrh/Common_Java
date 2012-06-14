@@ -135,4 +135,12 @@ public class DateUtil {
 	    return false;
 	}
 
+	public static int dateToInt(Date date) {
+		if (date != null) {
+			long time = date.getTime()/1000;
+			return new Long(time).intValue();
+		}
+		return 0;
+	}
+
 }
