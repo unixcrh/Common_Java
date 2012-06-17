@@ -550,6 +550,17 @@ public class MongoDBClient {
 		return collection.findOne(query);
 	}
 
+	public DBObject findOne(String tableName, String fieldName, Object value, DBObject returnFields) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, value);
+		return collection.findOne(query, returnFields);
+	}
+
+	
 	public DBObject findOneByObjectId(String tableName, String value) {
 		return this.findOne(tableName, "_id", new ObjectId(value));
 	}
@@ -589,6 +600,11 @@ public class MongoDBClient {
 			return null;
 
 		return collection.count(query);
+	}
+
+	public DBObject findOneByObjectId(String tableName, String objectId,
+			DBObject fields) {
+		return findOne(tableName, "_id", new ObjectId(objectId), fields);
 	}
 	
 
