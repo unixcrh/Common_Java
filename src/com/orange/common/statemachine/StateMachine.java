@@ -130,7 +130,7 @@ public class StateMachine {
 			return;
 		
 		for (Action a : actionList){
-			log.info(id + " execute action " + a.getClass().getSimpleName());
+			log.info(id + " <executeAction> " + a.getClass().getSimpleName());
 			a.execute(context);
 		}
 	}
