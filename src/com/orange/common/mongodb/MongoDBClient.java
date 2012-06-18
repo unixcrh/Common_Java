@@ -257,6 +257,17 @@ public class MongoDBClient {
 		return collection.findOne(query);
 	}
 
+	public DBObject findOne(String tableName, DBObject query, DBObject returnFields) {
+		if (query == null)
+			return null;
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		return collection.findOne(query, returnFields);
+	}
+
+	
 	public DBObject findOneWithArrayLimit(String tableName, DBObject query,
 			String arrayField, int offset, int limit) {
 		if (query == null)
@@ -339,10 +350,6 @@ public class MongoDBClient {
 		if (collection == null)
 			return null;
 
-		// System.out.println("<debug> find "+tableName+", query="+
-		// query.toString()+", orderBy="+orderBy.toString()+
-		// ", limit="+limit+", offset="+offset);
-
 		DBCursor cursor = null;
 		if (orderBy == null) {
 			cursor = collection.find(query).skip(offset).limit(limit);
@@ -353,6 +360,24 @@ public class MongoDBClient {
 
 		return cursor;
 	}
+	
+	public DBCursor find(String tableName, DBObject query,DBObject retureFields, DBObject orderBy,
+			int offset, int limit) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBCursor cursor = null;
+		if (orderBy == null) {
+			cursor = collection.find(query,retureFields).skip(offset).limit(limit);
+		} else {
+			cursor = collection.find(query,retureFields).sort(orderBy).skip(offset).limit(
+					limit);
+		}
+
+		return cursor;
+	}
+	
 
 	public DBCursor findByIds(String tableName, String fieldName,
 			List<ObjectId> valueList) {
@@ -443,9 +468,25 @@ public class MongoDBClient {
 		in.put("$in", valueList);
 		DBObject query = new BasicDBObject();
 		query.put(fieldName, in);
+//		log.info("map search = " + query);
 		return collection.find(query).skip(offset).limit(count);
 	}
 
+
+	public DBCursor findByFieldInValues(String tableName, String fieldName,
+			List<Object> valueList,DBObject returnFields,  int offset, int count) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		DBObject in = new BasicDBObject();
+		in.put("$in", valueList);
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, in);
+//		log.info("map search = " + query);
+		return collection.find(query,returnFields).skip(offset).limit(count);
+	}
+
+	
 	public DBCursor findByFieldsInValues(String tableName,
 			Map<String, List<Object>> fieldValueMap, int offset, int limit) {
 		DBCollection collection = db.getCollection(tableName);
@@ -467,7 +508,7 @@ public class MongoDBClient {
 		}
 		return collection.find(query).skip(offset).limit(limit);
 	}
-
+	
 	public boolean inc(String tableName, String keyFieldName,
 			Object keyFieldValue, String counterName, int counterValue) {
 
@@ -509,6 +550,17 @@ public class MongoDBClient {
 		return collection.findOne(query);
 	}
 
+	public DBObject findOne(String tableName, String fieldName, Object value, DBObject returnFields) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, value);
+		return collection.findOne(query, returnFields);
+	}
+
+	
 	public DBObject findOneByObjectId(String tableName, String value) {
 		return this.findOne(tableName, "_id", new ObjectId(value));
 	}
@@ -549,5 +601,11 @@ public class MongoDBClient {
 
 		return collection.count(query);
 	}
+
+	public DBObject findOneByObjectId(String tableName, String objectId,
+			DBObject fields) {
+		return findOne(tableName, "_id", new ObjectId(objectId), fields);
+	}
+	
 
 }
