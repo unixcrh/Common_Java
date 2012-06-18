@@ -35,7 +35,7 @@ public abstract class CommonService {
     	
     	int MAX_BUFFER_SIZE = 8*1024;
         byte[] buf = new byte[MAX_BUFFER_SIZE];  
-        List<ByteBuffer> byteList = new ArrayList<ByteBuffer>();
+        List<byte[]> byteList = new ArrayList<byte[]>();
 
         int totalLen = 0;
         int result;    
@@ -43,11 +43,14 @@ public abstract class CommonService {
             result = in.read(buf, 0, MAX_BUFFER_SIZE); // does +=  
             if (result > 0) {
             	totalLen += result;
-            	ByteBuffer bytes = ByteBuffer.wrap(buf, 0, result);
+            	byte[] bytes = new byte[result];
+            	for (int i=0; i<result; i++){
+            		bytes[i] = buf[i];
+            	}
             	byteList.add(bytes);
             }  
         }  
-        while(result != -1); // loop only if the buffer was filled  
+        while (result > 0); // loop only if the buffer was filled  
         in.close();
 
         if (totalLen <= 0){
@@ -55,8 +58,8 @@ public abstract class CommonService {
         }
         
         ByteBuffer retByteBuffer = ByteBuffer.allocate(totalLen);
-        for (ByteBuffer byteBuffer : byteList){
-        	retByteBuffer.put(byteBuffer);
+        for (byte[] bytes : byteList){
+        	retByteBuffer.put(bytes);
         }
                
         byte[] data = retByteBuffer.array();
