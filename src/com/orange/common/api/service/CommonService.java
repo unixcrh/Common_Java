@@ -219,5 +219,13 @@ public abstract class CommonService {
 		}
 		return defaultValue;
 	}
-	
+
+	protected long getLongValueFromRequeset(HttpServletRequest request, String key, long defaultValue) {
+		String value = request.getParameter(key);
+		if (value != null && value.length() != 0) {
+			return Long.valueOf(value);
+		}
+		return defaultValue;
+	}
+
 }
