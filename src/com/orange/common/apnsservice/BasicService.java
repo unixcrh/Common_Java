@@ -61,7 +61,7 @@ public abstract class BasicService {
         setPayload();
         try{
             apnsService.push(deviceToken, payload);
-            log.info("APNS send push = " + payload);
+            log.info("APNS send push = ".concat(payload).concat(", to deviceToken=".concat(deviceToken)));
         }
         catch (NetworkIOException e) {
             log.error("send message to apn, catch NetworkIOException="+e.toString(), e);

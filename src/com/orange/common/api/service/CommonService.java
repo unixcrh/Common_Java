@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.cassandra.cli.CliParser.value_return;
 import org.apache.log4j.Logger;
 
 import net.sf.json.JSONObject;
@@ -124,6 +123,11 @@ public abstract class CommonService {
 	public void printData(){
 		log.info(toString());
 	}
+		
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 
 	// return false if this method doesn't need security check
 	public abstract boolean needSecurityCheck();
@@ -166,7 +170,7 @@ public abstract class CommonService {
 	public boolean validateSecurity(HttpServletRequest request) {
 
 		if (needSecurityCheck() == false) {
-			log.warn("<validateSecurity> skip security check");
+			log.debug("<validateSecurity> skip security check");
 			return true;
 		}
 

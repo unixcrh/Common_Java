@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
-
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 import com.notnoop.apns.PayloadBuilder;
@@ -88,8 +86,6 @@ public class AppApnsService extends BasicService {
 		}
 
 		payload = builder.build();
-		System.out.println(builder.toString());
-
 		return true;
 	}
 
