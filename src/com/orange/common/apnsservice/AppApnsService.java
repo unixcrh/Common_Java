@@ -40,6 +40,16 @@ public class AppApnsService extends BasicService {
 		return service;
 	}
 
+	
+	public  void updateService(String deviceToken, int badge,
+			String alertMessage, String sound, HashMap<String, Object> userInfo) {
+		this.deviceToken = deviceToken;
+		this.badge = badge;
+		this.alertMessage = alertMessage;
+		this.sound = sound;
+		this.userInfo = userInfo;		
+	}
+	
 	public static AppApnsService createService(String certificatePath,
 			String password, String deviceToken, int badge,
 			String localizeKey, List<String>localizeValues, String sound, HashMap<String, Object> userInfo) {
