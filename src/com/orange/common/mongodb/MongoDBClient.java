@@ -321,6 +321,18 @@ public class MongoDBClient {
 		collection.findAndRemove(query);
 		return true;
 	}
+	
+	public boolean remove(String tableName, DBObject query) {
+		if (query == null)
+			return false;
+
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return false;
+
+		collection.remove(query);
+		return true;
+	}
 
 	public boolean removeByObjectId(String tableName, String objectId) {
 		BasicDBObject object = new BasicDBObject();
