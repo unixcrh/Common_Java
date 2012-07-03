@@ -41,8 +41,24 @@ public class ServiceHandler {
 
 	
 	public void handlRequest(HttpServletRequest request,
+			HttpServletResponse response){
+		
+		long startTime = System.currentTimeMillis();
+		handle(request, response);
+		long endTime = System.currentTimeMillis();
+		long execTime = (endTime-startTime);
+		if (execTime > 1000){
+			log.warn("[STAT] execution time="+execTime);
+		}
+		else{
+			log.debug("[STAT] execution time="+execTime);
+		}
+	}
+	
+	private void handle(HttpServletRequest request,
 			HttpServletResponse response) {
 
+		
 		boolean gzip = isGzipEncoding(request); 
 
 		printRequest(request);
