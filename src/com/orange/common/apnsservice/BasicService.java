@@ -35,7 +35,7 @@ public abstract class BasicService {
 	                .withSandboxDestination()
 	                .build();
 	        
-	        log.info("Create Production APNS Service With "+certificatePath+", "+ password);
+	        log.info("Create Test APNS Service With "+certificatePath+", "+ password);
         }
         else{
 	        apnsService = APNS.newService()
@@ -43,7 +43,7 @@ public abstract class BasicService {
 	        		.withProductionDestination()
 	        		.build();     	       
 
-	        log.info("Create Test APNS Service With "+certificatePath+", "+ password);
+	        log.info("Create Production APNS Service With "+certificatePath+", "+ password);
         }    	
         
         return apnsService;
