@@ -1,5 +1,6 @@
 package com.orange.common.apnsservice;
 
+import org.antlr.grammar.v3.ANTLRv3Parser.finallyClause_return;
 import org.apache.log4j.Logger;
 
 import com.notnoop.apns.APNS;
@@ -10,14 +11,10 @@ import com.orange.common.utils.StringUtil;
 
 public abstract class BasicService {
     
-    private static final Logger log = Logger.getLogger(BasicService.class.getName());
+    protected static final Logger log = Logger.getLogger(BasicService.class.getName());
 
-    String certificatePath;
-    String password;
-    String deviceToken;
-    String payload;
-    ApnsService apnsService;
-    public static boolean IS_TEST = initIsTest(); 
+    protected final ApnsService apnsService;
+    public static final boolean IS_TEST = initIsTest(); 
         
     private static boolean initIsTest(){
     	
@@ -30,48 +27,34 @@ public abstract class BasicService {
     	return isTest;
     }
     
-    public BasicService(ApnsService apnsService) {
-        super();
-        this.apnsService = apnsService;
-    }
-
-    @Deprecated
-	public BasicService(String certificatePath, String password) {
-    	
-        this.certificatePath = certificatePath;
-        this.password = password;
+    public static ApnsService createApnsService(String certificatePath, String password){
+    	ApnsService apnsService = null;
         if (IS_TEST){
 	        apnsService = APNS.newService()
 	                .withCert(certificatePath, password)
 	                .withSandboxDestination()
 	                .build();
+	        
+	        log.info("Create Production APNS Service With "+certificatePath+", "+ password);
         }
         else{
 	        apnsService = APNS.newService()
 	        		.withCert(certificatePath, password)
 	        		.withProductionDestination()
 	        		.build();     	       
-        }
+
+	        log.info("Create Test APNS Service With "+certificatePath+", "+ password);
+        }    	
+        
+        return apnsService;
     }
     
-    abstract boolean setPayload();
+    public BasicService(ApnsService apnsService) {
+        super();
+        this.apnsService = apnsService;
+    }        
 
-    public int handleServiceRequest(){
-        int result = ErrorCode.ERROR_SUCCESS;   
-        setPayload();
-        try{
-            apnsService.push(deviceToken, payload);
-            log.info("APNS send push = ".concat(payload).concat(", to deviceToken=".concat(deviceToken)));
-        }
-        catch (NetworkIOException e) {
-            log.error("send message to apn, catch NetworkIOException="+e.toString(), e);
-            result = ErrorCode.ERROR_PUSH_NETWORK_IOEXCETION;
-        }
-        catch (Exception e) {
-            log.error("send message to apn, catch Exception="+e.toString(), e);
-            result = ErrorCode.ERROR_PUSH_GENERAL_EXCEPTION;
-        }
-        return result;
-    }
+    abstract String getPayload();
+    abstract public int handleServiceRequest();
 }
 
