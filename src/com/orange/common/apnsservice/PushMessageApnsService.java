@@ -10,7 +10,7 @@ import com.notnoop.apns.PayloadBuilder;
 import com.notnoop.exceptions.NetworkIOException;
 import com.orange.common.urbanairship.ErrorCode;
 
-public class AppApnsService extends BasicService {
+public class PushMessageApnsService extends BasicService {
 
 	final int badge;
 	final String alertMessage = null;
@@ -21,7 +21,7 @@ public class AppApnsService extends BasicService {
     final String deviceToken;
 //    String payload;	
 
-	public AppApnsService(ApnsService service, String deviceToken, int badge,
+	public PushMessageApnsService(ApnsService service, String deviceToken, int badge,
 			String sound, HashMap<String, Object> userInfo, 
 			String localizeKey, List<String>localizeValues) {
 		
@@ -35,44 +35,6 @@ public class AppApnsService extends BasicService {
 		this.localizeKey = localizeKey;
 		this.localizeValues = localizeValues;
 	}
-//	
-//	public  void updateService(String deviceToken, int badge,
-//			String localizeKey, List<String>localizeValues, String sound, HashMap<String, Object> userInfo){
-//		this.deviceToken = deviceToken;
-//		this.badge = badge;
-//		this.localizeKey = localizeKey;
-//		this.localizeValues = localizeValues;
-//		this.sound = sound;
-//		this.userInfo = userInfo;
-//	}
-	
-//	public static AppApnsService createService(String certificatePath,
-//			String password, String deviceToken, int badge,
-//			String localizeKey, List<String>localizeValues, String sound, 
-//			HashMap<String, Object> userInfo) {
-//
-//		AppApnsService service = new AppApnsService(certificatePath, password);
-//		service.deviceToken = deviceToken;
-//		service.badge = badge;
-//		service.localizeKey = localizeKey;
-//		service.localizeValues = localizeValues;
-//		service.sound = sound;
-//		service.userInfo = userInfo;
-//		return service;
-//	}
-
-//	public static AppApnsService createService(ApnsService service,
-//			String deviceToken, int badge, String alertMessage, String sound,
-//			HashMap<String, Object> userInfo) {
-//
-//		AppApnsService Appservice = new AppApnsService(service);
-//		Appservice.deviceToken = deviceToken;
-//		Appservice.badge = badge;
-//		Appservice.alertMessage = alertMessage;
-//		Appservice.sound = sound;
-//		Appservice.userInfo = userInfo;
-//		return Appservice;
-//	}
 
 	@Override
 	String getPayload() {
