@@ -170,6 +170,16 @@ public class MongoDBClient {
 		return collection.findAndModify(query, null, null, false, update, true,
 				false);
 	}
+	
+	public void updateOne(String tableName, DBObject query, DBObject update) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return;
+
+		log.info("<updateAll> query = " + query.toString() + ", update = "
+				+ update.toString());
+		collection.update(query, update, false, false);
+	}
 
 	public void updateAll(String tableName, DBObject query, DBObject update) {
 		DBCollection collection = db.getCollection(tableName);

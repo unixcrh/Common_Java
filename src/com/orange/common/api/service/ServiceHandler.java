@@ -44,11 +44,11 @@ public class ServiceHandler {
 			HttpServletResponse response){
 		
 		long startTime = System.currentTimeMillis();
-		handle(request, response);
+		handle(request, response, startTime);
 		long endTime = System.currentTimeMillis();
 		long execTime = (endTime-startTime);
 		if (execTime > 1000){
-			log.warn("[STAT] execution time="+execTime);
+			log.warn("[STAT] "+ this.getClass().getSimpleName() + " execution time="+execTime);
 		}
 		else{
 			log.debug("[STAT] execution time="+execTime);
@@ -56,8 +56,7 @@ public class ServiceHandler {
 	}
 	
 	private void handle(HttpServletRequest request,
-			HttpServletResponse response) {
-
+			HttpServletResponse response, long startTime) {
 		
 		boolean gzip = isGzipEncoding(request); 
 
@@ -102,6 +101,12 @@ public class ServiceHandler {
 
 			// handle request
 			obj.handleData();
+			
+			long endTime = System.currentTimeMillis();
+			long execTime = (endTime-startTime);
+			if (execTime > 1000){
+				log.warn("[STAT] "+ obj.getClass().getSimpleName() + " logic execution time="+execTime);
+			}
 		} catch (HectorException e) {
 			obj.resultCode = CommonErrorCode.ERROR_CASSANDRA;
 			log.error("catch DB exception=" + e.toString(), e);
