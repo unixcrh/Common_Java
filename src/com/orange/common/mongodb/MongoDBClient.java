@@ -176,7 +176,7 @@ public class MongoDBClient {
 		if (collection == null)
 			return;
 
-		log.info("<updateAll> query = " + query.toString() + ", update = "
+		log.info("<updateOne> query = " + query.toString() + ", update = "
 				+ update.toString());
 		collection.update(query, update, false, false);
 	}
