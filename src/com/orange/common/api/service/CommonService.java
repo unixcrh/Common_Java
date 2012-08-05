@@ -2,6 +2,7 @@ package com.orange.common.api.service;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public abstract class CommonService {
      * @exception IOException 
      *                if an input or output exception has occurred. 
      */  
-    protected byte[] readPostData(ServletInputStream in) throws IOException{  
+   static public byte[] readPostData(InputStream stream) throws IOException{  
     	
     	log.info("<readPostData>");
     	
@@ -39,7 +40,7 @@ public abstract class CommonService {
         int totalLen = 0;
         int result;    
         do {  
-            result = in.read(buf, 0, MAX_BUFFER_SIZE); // does +=  
+            result = stream.read(buf, 0, MAX_BUFFER_SIZE); // does +=  
             if (result > 0) {
             	totalLen += result;
             	byte[] bytes = new byte[result];
@@ -50,7 +51,7 @@ public abstract class CommonService {
             }  
         }  
         while (result > 0); // loop only if the buffer was filled  
-        in.close();
+        stream.close();
 
         if (totalLen <= 0){
         	return null;
