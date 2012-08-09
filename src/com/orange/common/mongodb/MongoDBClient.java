@@ -271,6 +271,8 @@ public class MongoDBClient {
 		if (query == null)
 			return null;
 
+		log.info("<findOne>:query = "+query+", returnFields = "+returnFields);
+		
 		DBCollection collection = db.getCollection(tableName);
 		if (collection == null)
 			return null;
@@ -506,6 +508,19 @@ public class MongoDBClient {
 		query.put(fieldName, in);
 //		log.info("map search = " + query);
 		return collection.find(query,returnFields).skip(offset).limit(count);
+	}
+
+	public DBCursor findByFieldInValues(String tableName, String fieldName,
+			List<Object> valueList,DBObject returnFields) {
+		DBCollection collection = db.getCollection(tableName);
+		if (collection == null)
+			return null;
+		DBObject in = new BasicDBObject();
+		in.put("$in", valueList);
+		DBObject query = new BasicDBObject();
+		query.put(fieldName, in);
+//		log.info("map search = " + query);
+		return collection.find(query,returnFields);
 	}
 
 	
