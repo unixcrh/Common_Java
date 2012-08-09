@@ -44,5 +44,7 @@ public class MongoDBExecutor {
 		return executorList.get(index);
 	}
     
-    
+    public MongoDBClient getMongoDBClient(){
+    	return mongoClient;
+    }
 }

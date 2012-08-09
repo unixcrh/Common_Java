@@ -10,7 +10,6 @@ public class RandomUtil {
 		}
 		
 		Random random = new Random();
-		random.setSeed(System.currentTimeMillis());		
 		int val = random.nextInt(n);
 		return val;		
 	}

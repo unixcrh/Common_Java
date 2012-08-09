@@ -109,7 +109,8 @@ public class ChannelUserManager {
 		}
 		
 		return list.get(0);
-	}	
+	}
+
 
 //	public void processDisconnectChannel(Channel channel){
 //		List<String> userIdList = findUsersInChannel(channel);
